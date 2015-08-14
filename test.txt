@@ -1,6 +1,0 @@
-test git add
-test git modify
-test git modify
-test git modify
-test git modify
-test git modify
