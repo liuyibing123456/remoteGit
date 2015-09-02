@@ -15,5 +15,20 @@ public class ObserverTest {
 		subject.setChanged();
 		subject.setType(1);
 	}
+	
+	@Test
+	public void testMultiThread() {
+		final Subject subject = new Subject();
+		
+		for(int i = 0; i < 10; i++) {
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					subject.addObserver(new NameObserver());
+					subject.addObserver(new TypeObserver());
+				}
+			}).start();
+		}
+	}
 
 }
