@@ -1,9 +1,6 @@
 package org.whocares.weather.util;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +13,8 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -34,6 +33,8 @@ public class GlobalUtils {
 	
 	private static final ObjectMapper objectMapper = new ObjectMapper();
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(GlobalUtils.class);
+	
 	/**
 	 * 根据properties文件及其key获取对应的value，默认在类路径下寻找文件。<br>
 	 * 当加载文件失败或找不到相应key时返回null。
@@ -43,14 +44,18 @@ public class GlobalUtils {
 	 * @return <br> key对应的value
 	 */
 	public static final String getPropVal(String propName, String key) {
+		String value = null;
 		try {
 			Resource resource = new ClassPathResource(propName);
 			Properties props = PropertiesLoaderUtils.loadProperties(resource);
-			return props.getProperty(key);
+			value = props.getProperty(key);
+			
+			LOGGER.info("get value [ {} ] through property [ {} ] in file [ {} ]", new Object[]{value, key, propName});
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			return null;
 		}
+		return value;
 	}
 	
 	/**
