@@ -1,40 +1,97 @@
 package org.whocares.weather.entity;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.whocares.weather.jackson.DateDeserializer;
 
+
+/**
+ * å¯¹åº”æ–‡æ¡£ä¸­basic
+ * 
+ * @see<a href=
+ *        'http://www.heweather.com/documents/api'>http://www.heweather.com/documents/api</a>
+ * @author whocares
+ * @version 0.1
+ *
+ */
 public class City {
 	/**
-	 * ³ÇÊĞID
+	 * åŸå¸‚ID
 	 */
 	@JsonProperty("id")
 	private String cityId;
 	/**
-	 * ³ÇÊĞÃû³Æ
+	 * åŸå¸‚åç§°
 	 */
 	@JsonProperty("city")
 	private String cityName;
 	/**
-	 * ¹ú¼ÒÃû³Æ
+	 * å›½å®¶åç§°
 	 */
 	@JsonProperty("cnty")
 	private String courtyName;
 	/**
-	 * Î³¶È
+	 * çº¬åº¦
 	 */
 	@JsonProperty("lat")
 	private String latitude;
 	/**
-	 * ¾­¶È
+	 * ç»åº¦
 	 */
 	@JsonProperty("lon")
-	private String  longitude;
+	private String longitude;
 	/**
-	 * Êı¾İ¸üĞÂÊ±¼ä,24Ğ¡Ê±ÖÆ
+	 * æ•°æ®æ›´æ–°æ—¶é—´,24å°æ—¶åˆ¶
 	 */
 	@JsonProperty("update")
-	private Map<String, Date> updateTime = new HashMap<String, Date>();
+	private DataUpdateTime dataUpdateTime;
+
+	public String getCityId() {
+		return cityId;
+	}
+
+	public String getCityName() {
+		return cityName;
+	}
+
+	public String getCourtyName() {
+		return courtyName;
+	}
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public DataUpdateTime getDataUpdateTime() {
+		return dataUpdateTime;
+	}
+
+	public static class DataUpdateTime {
+		/**
+		 * æ•°æ®æ›´æ–°çš„å½“åœ°æ—¶é—´
+		 */
+		@JsonProperty("loc")
+		@JsonDeserialize(using = DateDeserializer.class)
+		private Date localTime;
+		/**
+		 * æ•°æ®æ›´æ–°çš„UTCæ—¶é—´
+		 */
+		@JsonProperty("utc")
+		@JsonDeserialize(using = DateDeserializer.class)
+		private Date utcTime;
+
+		public Date getLocalTime() {
+			return localTime;
+		}
+
+		public Date getUtcTime() {
+			return utcTime;
+		}
+	}
 }
