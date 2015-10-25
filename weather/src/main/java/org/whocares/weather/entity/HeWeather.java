@@ -42,4 +42,32 @@ public class HeWeather {
 	 */
 	@JsonProperty("suggestion")
 	private Suggestion suggestion;
+
+	public String getStatus() {
+		return status;
+	}
+
+	public City getCity() {
+		return city;
+	}
+
+	public RealTimeWeather getRealTimeWeather() {
+		return realTimeWeather;
+	}
+
+	public List<DailyWeather> getDailyWeatherList() {
+		return dailyWeatherList;
+	}
+
+	public List<HourlyWeather> getHourlyWeatherList() {
+		return hourlyWeatherList;
+	}
+
+	public AirQuality getAirQuality() {
+		return airQuality;
+	}
+
+	public Suggestion getSuggestion() {
+		return suggestion;
+	}
 }
