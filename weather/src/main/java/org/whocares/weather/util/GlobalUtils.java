@@ -1,7 +1,12 @@
 package org.whocares.weather.util;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -12,12 +17,13 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class GlobalUtils {
 	
@@ -115,5 +121,27 @@ public class GlobalUtils {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static String readFileAsString(String classpath) {
+		try {
+			Resource resource = new ClassPathResource(classpath);
+			InputStream is = resource.getInputStream();
+			BufferedReader br = new BufferedReader(new InputStreamReader(is));
+			StringBuilder sb = new StringBuilder();
+			String temp = null;
+			while ((temp = br.readLine()) != null) {
+				sb.append(temp);
+			}
+			return sb.toString();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static String parseDate(String dateFormatter, Date date) {
+		SimpleDateFormat formatter = new SimpleDateFormat(dateFormatter);
+		return formatter.format(date);
 	}
 }
