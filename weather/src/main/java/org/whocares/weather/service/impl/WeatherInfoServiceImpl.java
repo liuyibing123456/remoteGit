@@ -45,7 +45,7 @@ public class WeatherInfoServiceImpl implements IWeatherInfoService {
 			Map<String, String> resPackage = GlobalUtils.parseResponseJson(value, Map.class);
 			
 			String successCode = GlobalUtils.getPropVal(GlobalUtils.ERRORCODE_PROPS, "error.info.success");
-			if (!successCode.equals(resPackage.ge)) {
+			if (!successCode.equals(resPackage.get(null))) {
 				System.out.println("log...");
 				return null;
 			}
