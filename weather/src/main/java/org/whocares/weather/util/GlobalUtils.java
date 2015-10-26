@@ -22,12 +22,12 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
 public class GlobalUtils {
 	
 	/**
-	 * config.properties ÎÄ¼şÃû
+	 * config.properties æ–‡ä»¶å
 	 */
 	public static final String CONFIG_PROPS = "config.properties";
 	
 	/**
-	 * errorCode.properties ÎÄ¼şÃû
+	 * errorCode.properties æ–‡ä»¶å
 	 */
 	public static final String ERRORCODE_PROPS = "errorCode.properties";
 	
@@ -36,12 +36,12 @@ public class GlobalUtils {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GlobalUtils.class);
 	
 	/**
-	 * ¸ù¾İpropertiesÎÄ¼ş¼°Æäkey»ñÈ¡¶ÔÓ¦µÄvalue£¬Ä¬ÈÏÔÚÀàÂ·¾¶ÏÂÑ°ÕÒÎÄ¼ş¡£<br>
-	 * µ±¼ÓÔØÎÄ¼şÊ§°Ü»òÕÒ²»µ½ÏàÓ¦keyÊ±·µ»Ønull¡£
+	 * æ ¹æ®propertiesæ–‡ä»¶åŠå…¶keyè·å–å¯¹åº”çš„valueï¼Œé»˜è®¤åœ¨ç±»è·¯å¾„ä¸‹å¯»æ‰¾æ–‡ä»¶ã€‚<br>
+	 * å½“åŠ è½½æ–‡ä»¶å¤±è´¥æˆ–æ‰¾ä¸åˆ°ç›¸åº”keyæ—¶è¿”å›nullã€‚
 	 * 
-	 * @param propName <br>propertiesÎÄ¼ş
-	 * @param key <br>propertiesµÄkey
-	 * @return <br> key¶ÔÓ¦µÄvalue
+	 * @param propName <br>propertiesæ–‡ä»¶
+	 * @param key <br>propertiesçš„key
+	 * @return <br> keyå¯¹åº”çš„value
 	 */
 	public static final String getPropVal(String propName, String key) {
 		String value = null;
@@ -102,6 +102,15 @@ public class GlobalUtils {
 	public static <T> T parseResponseJson(String jsonStr, Class<T> clazz) {
 		try {
 			return objectMapper.readValue(jsonStr, clazz);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static String parseOject2Json(Object object) {
+		try {
+			return objectMapper.writeValueAsString(object);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;

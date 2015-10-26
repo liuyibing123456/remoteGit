@@ -13,9 +13,9 @@ public class CityServiceImplTest {
 
 	@Test
 	public void testQueryCityInfo() {
-		ICityService service = new CityServiceImpl();
-//		service.queryCityInfo("北京");
-		service.queryCityInfo("\u5317\u4EAC");
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		ICityService service = context.getBean("cityService", CityServiceImpl.class);
+		service.queryCityInfo("北京");
 	}
 	
 	@Test
@@ -23,6 +23,7 @@ public class CityServiceImplTest {
 		ICityService service = new CityServiceImpl();
 		service.queryCityList("海淀");
 		//service.queryCityList("haidian");
+		String repsonse = "{\"errNum\": 0, \"retMsg\": \"success\", \"retData\": { \"cityName\": \"北京\", \"provinceName\": \"北京\", \"cityCode\": \"101010100\", \"zipCode\": \"100000\", \"telAreaCode\": \"010\" } } ";
 	}
 	
 	@Test
@@ -30,10 +31,10 @@ public class CityServiceImplTest {
 		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		System.out.println("==========================");
 //		RedisTemplate<String, String> redisTemplate = context.getBean("redisTemplate", StringRedisTemplate.class);
-		CityServiceImpl service = context.getBean("cityService", CityServiceImpl.class);
+		RedisTemplate<String, String> template = context.getBean("redisTemplate", RedisTemplate.class);
+		String value = template.boundValueOps("org.whocares.tes").get();
+		System.out.println(value == null);
 		System.out.println("==========================");
-		System.out.println("北京".hashCode());
-		System.out.println("海淀".hashCode());
 	}
 
 }

@@ -1,4 +1,4 @@
-json = [{"districtId":"CN101010100","districtEN":"beijing","districtCN":"北京","cityCN":"北京","provinceCN":"北京"},
+[{"districtId":"CN101010100","districtEN":"beijing","districtCN":"北京","cityCN":"北京","provinceCN":"北京"},
 {"districtId":"CN101010200","districtEN":"haidian","districtCN":"海淀","cityCN":"北京","provinceCN":"北京"},
 {"districtId":"CN101010300","districtEN":"chaoyang","districtCN":"朝阳","cityCN":"北京","provinceCN":"北京"},
 {"districtId":"CN101010400","districtEN":"shunyi","districtCN":"顺义","cityCN":"北京","provinceCN":"北京"},
@@ -2564,4 +2564,4 @@ json = [{"districtId":"CN101010100","districtEN":"beijing","districtCN":"北京"
 {"districtId":"CN101340404","districtEN":"nantou","districtCN":"南投","cityCN":"台中","provinceCN":"台湾"},
 {"districtId":"CN101340405","districtEN":"hualian","districtCN":"花莲","cityCN":"台中","provinceCN":"台湾"},
 {"districtId":"CN101340406","districtEN":"yunlin","districtCN":"云林","cityCN":"台中","provinceCN":"台湾"},
-{"districtId":"CN101310230","districtEN":"nanzidao","districtCN":"南子岛","cityCN":"南子岛","provinceCN":"海南"}];
+{"districtId":"CN101310230","districtEN":"nanzidao","districtCN":"南子岛","cityCN":"南子岛","provinceCN":"海南"}]

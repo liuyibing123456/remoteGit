@@ -34,14 +34,13 @@ public abstract class AbstractProcessTemplate {
 	
 	protected abstract String getResponseMessage(String url, Map<String, String> heads, Map<String, String> params);
 	
-	protected boolean flag() {
+	protected boolean cacheFlag() {
 		return true;
 	}
 	
 	private String dealResMessage(String responseStr) {
 		/*
-		 * 将Map值类型声明为Object，是因为json转换后有Integer类型无法转为String；
-		 * 
+		 * 将Map值类型声明为Object，是因为json转换后有Integer类型无法转为String
 		 */
 		@SuppressWarnings("unchecked")
 		Map<String, Object> resPackage = GlobalUtils.parseResponseJson(responseStr, Map.class);
