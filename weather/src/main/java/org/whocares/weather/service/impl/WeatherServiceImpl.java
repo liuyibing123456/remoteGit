@@ -123,7 +123,7 @@ public class WeatherServiceImpl implements IWeatherService {
 			
 			List<DailyWeather> dailyWeatherList = heWeather.getDailyWeatherList();
 			for (DailyWeather dailyWeather : dailyWeatherList) {
-				BoundValueOperations<String, String> dailyWeatherBVOper = redisTemplate.boundValueOps("info.weather.dailyWeather." + dailyWeather.getDate() + "." + cityId);
+				BoundValueOperations<String, String> dailyWeatherBVOper = redisTemplate.boundValueOps("info.weather.dailyWeather." + GlobalUtils.parseDate("yyyy-MM-dd", dailyWeather.getDate()) + "." + cityId);
 				dailyWeatherBVOper.set(GlobalUtils.parseOject2Json(dailyWeather));
 			}
 			
@@ -140,7 +140,7 @@ public class WeatherServiceImpl implements IWeatherService {
 			
 			List<HourlyWeather> hourlyWeatherList = heWeather.getHourlyWeatherList();
 			for (HourlyWeather hourlyWeather : hourlyWeatherList) {
-				BoundValueOperations<String, String> hourlyWeatherBHOper = redisTemplate.boundValueOps("info.weather.hourlyWeather." + hourlyWeather.getDate() + "." + cityId);
+				BoundValueOperations<String, String> hourlyWeatherBHOper = redisTemplate.boundValueOps("info.weather.hourlyWeather." + GlobalUtils.parseDate("yyyy-MM-dd-HH:mm", hourlyWeather.getDate()) + "." + cityId);
 				hourlyWeatherBHOper.set(GlobalUtils.parseOject2Json(hourlyWeather));
 			}
 			
@@ -247,9 +247,11 @@ public class WeatherServiceImpl implements IWeatherService {
 		heads.put("apikey", GlobalUtils.getPropVal(GlobalUtils.CONFIG_PROPS, "apikey"));
 		
 		Map<String, String> params = new HashMap<String, String>();
-		params.put("city", cityId);
+		params.put("cityid", cityId);
 		
-		String value = GlobalUtils.httpConnection(url, heads, params);
+		LOGGER.debug("city : " + cityId);
+		
+		String value = GlobalUtils.httpConnection(url, heads, params);//GlobalUtils.readFileAsString("weather.json");//
 		LOGGER.debug("responseStr : " + value);
 		
 		value = value.substring(value.indexOf("[") + 1, value.lastIndexOf("]"));
