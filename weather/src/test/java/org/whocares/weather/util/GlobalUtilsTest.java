@@ -9,11 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.JsonEncoding;
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.util.JSONPObject;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -21,6 +16,11 @@ import static org.junit.Assert.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.whocares.weather.util.GlobalUtils;
+
+import com.fasterxml.jackson.core.JsonEncoding;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class GlobalUtilsTest {
 
@@ -51,14 +51,13 @@ public class GlobalUtilsTest {
 		Resource resource = new ClassPathResource("response.json");
 		InputStream is = resource.getInputStream();
 		BufferedReader bf=new BufferedReader(new InputStreamReader(is,"UTF-8"));
-	     //最好在将字节流转换为字符流的时候 进行转码  
 	     StringBuffer buffer=new StringBuffer();
 	     String line="";
 	     while((line=bf.readLine())!=null){
 	         buffer.append(line);
 	     }
 	     System.out.println(buffer.toString());
-		System.out.println(GlobalUtils.getJson(buffer.toString(), "pm10"));
+//		System.out.println(GlobalUtils.getJson(buffer.toString(), "pm10"));
 	}
 	@Test
 	public void testParseResponseJson() throws IOException {
