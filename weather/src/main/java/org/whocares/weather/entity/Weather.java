@@ -2,9 +2,12 @@ package org.whocares.weather.entity;
 
 import java.util.Date;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.whocares.weather.jackson.DateDeserializer;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * 抽象父类
@@ -13,6 +16,7 @@ import org.whocares.weather.jackson.DateDeserializer;
  * @version 0.1
  *
  */
+@JsonInclude(Include.NON_NULL)
 public abstract class Weather {
 	/**
 	 * 相对湿度(%)

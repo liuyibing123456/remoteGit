@@ -2,7 +2,7 @@ package org.whocares.weather.domain;
 
 import java.util.Date;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Weather {
 	private String city;

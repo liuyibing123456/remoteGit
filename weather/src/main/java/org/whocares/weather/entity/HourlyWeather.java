@@ -2,8 +2,11 @@ package org.whocares.weather.entity;
 
 import java.util.Date;
 
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.whocares.weather.jackson.DateDeserializer;
+import org.whocares.weather.jackson.DateSerializer;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * 对应文档中hourly_forecast
@@ -24,5 +27,10 @@ public class HourlyWeather extends Weather {
 	@JsonDeserialize(using = DateDeserializer.class)
 	public void setDate(Date date) {
 		super.setDate(date);
+	}
+	
+	@JsonSerialize(using = DateSerializer.class)
+	public Date getDate() {
+		return super.getDate();
 	}
 }

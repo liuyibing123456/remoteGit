@@ -1,6 +1,6 @@
 package org.whocares.weather.domain;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class City {
 	@JsonProperty("provinceName")

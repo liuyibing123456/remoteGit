@@ -2,9 +2,12 @@ package org.whocares.weather.entity;
 
 import java.util.Date;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.whocares.weather.jackson.DateDeserializer;
+import org.whocares.weather.jackson.DateSerializer;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 
 /**
@@ -47,7 +50,7 @@ public class City {
 	 */
 	@JsonProperty("update")
 	private DataUpdateTime dataUpdateTime;
-
+	
 	public String getCityId() {
 		return cityId;
 	}
@@ -78,12 +81,14 @@ public class City {
 		 */
 		@JsonProperty("loc")
 		@JsonDeserialize(using = DateDeserializer.class)
+		@JsonSerialize(using = DateSerializer.class)
 		private Date localTime;
 		/**
 		 * 数据更新的UTC时间
 		 */
 		@JsonProperty("utc")
 		@JsonDeserialize(using = DateDeserializer.class)
+		@JsonSerialize(using = DateSerializer.class)
 		private Date utcTime;
 
 		public Date getLocalTime() {

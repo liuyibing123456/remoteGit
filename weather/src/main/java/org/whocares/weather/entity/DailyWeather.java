@@ -2,9 +2,13 @@ package org.whocares.weather.entity;
 
 import java.util.Date;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.whocares.weather.jackson.NormalDateDeserializer;
+import org.whocares.weather.jackson.NormalDateSerializer;
 import org.whocares.weather.jackson.TimeDeserializer;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * 对应文档中daily_forecast
@@ -29,10 +33,16 @@ public class DailyWeather extends Weather {
 	 * @see org.whocares.weather.entity.Weather#setDate(java.util.Date)
 	 */
 	@Override
-//	@JsonProperty("date")
-//	@JsonDeserialize(using = NormalDateDeserializer.class)
+	@JsonProperty("date")
+	@JsonDeserialize(using = NormalDateDeserializer.class)
 	public void setDate(Date date) {
 		super.setDate(date);
+	}
+	
+	@Override
+	@JsonSerialize(using = NormalDateSerializer.class)
+	public Date getDate() {
+		return super.getDate();
 	}
 	
 	public Astronomy getAstronomy() {

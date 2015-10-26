@@ -1,6 +1,6 @@
 package org.whocares.weather.entity;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * 对应文档中suggestion

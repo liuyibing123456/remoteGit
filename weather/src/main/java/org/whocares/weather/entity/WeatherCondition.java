@@ -1,6 +1,8 @@
 package org.whocares.weather.entity;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
  * 对应文档中conf
@@ -11,6 +13,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
  * @version 0.1
  *
  */
+@JsonInclude(Include.NON_NULL)
 public class WeatherCondition {
 	/**
 	 * 实时天气状况代码
