@@ -144,4 +144,9 @@ public class GlobalUtils {
 		SimpleDateFormat formatter = new SimpleDateFormat(dateFormatter);
 		return formatter.format(date);
 	}
+	
+	public static String getCurrentDate() {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		return formatter.format(new Date());
+	}
 }

@@ -1,18 +1,20 @@
 package org.whocares.weather.service;
 
+import java.util.Date;
+
 public interface IWeatherService {
 	
-	void queryWeatherInfoToCache(String cityId);
-	
-	String queryCityByCache(String cityId);
+	String queryCityInfo(String cityId);
 
-	String queryRealTimeWeatherByCache(String cityId);
+	String queryRealTimeWeatherInfo(String cityId);
 
-	String queryAirQualityByCache(String cityId);
+	String queryAirQualityInfo(String cityId);
 
-	String querySuggestionByCache(String cityId);
+	String querySuggestionInfo(String cityId);
 
-	String queryDailyWeatherByCache(String cityId);
+	String queryFutureWeatherInfo(String cityId);
 
-	String queryHourlyWeatherByCache(String cityId);
+	String queryHistoryWeatherInfo(String cityId, Date beginDate, int days);
+
+	String queryHourlyWeatherInfo(String cityId);
 }

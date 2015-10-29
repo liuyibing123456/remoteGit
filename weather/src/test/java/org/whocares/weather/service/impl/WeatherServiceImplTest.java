@@ -2,73 +2,74 @@ package org.whocares.weather.service.impl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Date;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.whocares.weather.entity.HeWeather;
+import org.whocares.weather.service.IWeatherService;
 
 public class WeatherServiceImplTest {
 
-	private ApplicationContext context;
+	private IWeatherService weatherService;
 	
 	@Before
 	public void init() {
-		context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		weatherService = context.getBean("weatherService", WeatherServiceImpl.class);
+	}
+	
+	@After
+	public void destory() {
 	}
 	
 	@Test
-	public void testQueryWeatherInfoToCache() {
-		WeatherServiceImpl weatherService = context.getBean("weatherService", WeatherServiceImpl.class);
-		weatherService.queryWeatherInfoToCache("CN101010100");
-	}
-	
-	@Test
-	public void testQueryCityByCache() {
-		WeatherServiceImpl weatherService = context.getBean("weatherService", WeatherServiceImpl.class);
-		String retMsg = weatherService.queryCityByCache("CN101010100");
+	public void testQueryCityInfo() {
+		String retMsg = weatherService.queryCityInfo("CN101010100");
 		System.out.println(retMsg);
 	}
 	
 	@Test
-	public void testQueryRealTimeWeatherByCache() {
-		WeatherServiceImpl weatherService = context.getBean("weatherService", WeatherServiceImpl.class);
-		String retMsg = weatherService.queryRealTimeWeatherByCache("CN101010100");
+	public void testQueryRealTimeWeatherInfo() {
+		String retMsg = weatherService.queryRealTimeWeatherInfo("CN101010100");
 		System.out.println(retMsg);
 	}
 	
 	@Test
-	public void testQueryAirQualityByCache() {
-		WeatherServiceImpl weatherService = context.getBean("weatherService", WeatherServiceImpl.class);
-		String retMsg = weatherService.queryAirQualityByCache("CN101010100");
+	public void testQueryAirQualityInfo() {
+		String retMsg = weatherService.queryAirQualityInfo("CN101010100");
 		System.out.println(retMsg);
 	}
 	
 	@Test
-	public void testQuerySuggestionByCache() {
-		WeatherServiceImpl weatherService = context.getBean("weatherService", WeatherServiceImpl.class);
-		String retMsg = weatherService.querySuggestionByCache("CN101010100");
+	public void testQuerySuggestionInfo() {
+		String retMsg = weatherService.querySuggestionInfo("CN101010100");
 		System.out.println(retMsg);
 	}
 	
 	@Test
-	public void testQueryDailyWeatherByCache() {
-		WeatherServiceImpl weatherService = context.getBean("weatherService", WeatherServiceImpl.class);
-		String retMsg = weatherService.queryDailyWeatherByCache("CN101010100");
+	public void testQueryFutureWeatherInfo() {
+		String retMsg = weatherService.queryFutureWeatherInfo("CN101010100");
 		System.out.println(retMsg);
 	}
 	
 	@Test
-	public void testQueryHourlyWeatherByCache() {
-		WeatherServiceImpl weatherService = context.getBean("weatherService", WeatherServiceImpl.class);
-		String retMsg = weatherService.queryHourlyWeatherByCache("CN101010100");
+	public void testQueryHistoryWeatherInfo() {
+		String retMsg = weatherService.queryHistoryWeatherInfo("CN101010100", new Date(), 6);
+		System.out.println(retMsg);
+	}
+	
+	@Test
+	public void testQueryHourlyWeatherInfo() {
+		String retMsg = weatherService.queryHourlyWeatherInfo("CN101010100");
 		System.out.println(retMsg);
 	}
 	
 	@Test
 	public void testGetObjectFromHttp() {
-		WeatherServiceImpl weatherService = context.getBean("weatherService", WeatherServiceImpl.class);
 		try {
 			Method method = weatherService.getClass().getDeclaredMethod("getObjectFromHttp", String.class);
 			method.setAccessible(true);
