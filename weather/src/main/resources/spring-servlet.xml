@@ -2,12 +2,52 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xsi:schemaLocation="
             http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd
             http://www.springframework.org/schema/context
-            http://www.springframework.org/schema/context/spring-context.xsd">
+            http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/mvc
+            http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
 	<!-- 只需扫描@Controller，否则与applicationContext.xml下的扫描组件冲突 -->
 	<context:component-scan base-package="org.whocares.weather.web" />
+	
+	<!-- 解决stringHttpMessageConverter乱码问题 -->
+	<bean id= "stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+		<constructor-arg>
+			<bean class= "org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+				<property name="targetClass" value= "java.nio.charset.Charset"/>
+				<property name="targetMethod" value="forName" />
+				<property name="arguments">
+					<list>
+						<value>UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="mappingJackson2HttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+      <property name="supportedMediaTypes">
+          <list>
+            <value>application/json;charset=UTF-8</value>
+          </list>
+      </property>
+    </bean>
+    
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">      
+        <property name="messageConverters">      
+            <list >
+                <ref bean="stringHttpMessageConverter" />
+                <!-- <ref bean="mappingJackson2HttpMessageConverter" /> -->
+            </list>
+        </property>
+    </bean>
+    
+    <!-- 注册 @DateTimeFormat -->
+	<bean id="formattingConversionServiceFactoryBean" class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
+	<mvc:annotation-driven conversion-service="formattingConversionServiceFactoryBean" />  
+    
 </beans>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/bootstrap.min.css">
+</head>
+<body>
+	<div id="historyWeatherChart" style="height:300px"></div>
+
+	<script src="../js/jquery/jquery-1.11.1.js"></script>
+	<script src="../js/bootstrap/bootstrap.min.js"></script>
+	<script src="../js/other/echarts.js"></script>
+	<script src="../js/util.js"></script>
+	<script type="text/javascript">
+	function displayHistoryWeatherChart(dateArr, maxTemperArr, minTemperArr) {
+		// echarts.js 路径配置
+		require.config({
+	        paths: {
+	            echarts: '../js/other'
+	        }
+	    });
+		// 使用echarts.js
+		require(
+			[
+			    'echarts',
+			    'echarts/chart/line'
+			],
+            function (ec) {
+                var myChart = ec.init(document.getElementById('historyWeatherChart'));
+                /* myChart.showLoading({
+                    text: '玩儿命加载中...'
+                }); */
+				var option = {
+						title : {
+							text : '未来一周气温变化',
+							subtext : '测试数据'
+						},
+						tooltip : {
+							trigger : 'axis'
+						},
+						legend : {
+							data : [ '最高气温', '最低气温' ],
+							x : 'right'
+						},
+						xAxis : [ {
+							type : 'category',
+							boundaryGap : false,
+							axisLabel : {
+				                formatter: function(value) {
+				                	var date = new Date(value);
+				                	return (date.getMonth() + 1) + "/" + date.getDate();
+				                }
+				            },
+							/* scale : true, */
+							data : dateArr
+						} ],
+						yAxis : [ {
+							type : 'value',
+							axisLabel : {
+				                formatter: '{value} °C'
+				            }
+						} ],
+						grid : {
+							x : '40',
+							y : '60',
+							x2 : '20'
+						},
+						series : [
+							{
+								name:'最高气温',
+						        type:'line',
+						        smooth:true,
+						        itemStyle: {normal: {lineStyle: {type: 'default'}}},
+						        data: maxTemperArr
+							},
+						    {
+								name:'最低气温',
+								type:'line',
+								smooth:true,
+								itemStyle: {normal: {lineStyle: {type: 'default'}}},
+								data: minTemperArr
+							}
+						]
+					}
+					myChart.setOption(option);
+				});
+		}
+		$(function() {
+			var sendData = {"cityId" : "CN101010100"};
+			$.ajax({
+				url : "../weather/queryFutureInfo.do",
+				method : "get",
+				contentType : 'application/json;charset=UTF-8',
+				dataType : 'json',
+				data : sendData,
+				success : function(resData, textStatus, jqXHR) {
+					var dateArr = new Array();
+					var maxTemperArr = new Array();
+					var minTemperArr = new Array();
+					
+					console.log(JSON.stringify(resData));
+					$(resData).each(function(index, element) {
+						dateArr[index] = element.date;
+						maxTemperArr[index] = element.tmp.max;
+						minTemperArr[index] = element.tmp.min;
+					});
+					
+					displayHistoryWeatherChart(dateArr, maxTemperArr, minTemperArr);
+				},
+				error : function(XMLHttpRequest, textStatus, errorThrown) {
+				}
+			});
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/bootstrap.min.css">
+</head>
+<body>
+	<h4>future temp</h4>
+	<canvas id="historyWeatherChart" width="400" height="200"></canvas>
+
+	<div id="myCarousel" class="carousel slide">
+		<!-- 轮播（Carousel）指标 -->
+		<ol class="carousel-indicators">
+			<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+			<li data-target="#myCarousel" data-slide-to="1"></li>
+			<li data-target="#myCarousel" data-slide-to="2"></li>
+		</ol>
+		<!-- 轮播（Carousel）项目 -->
+		<div class="carousel-inner">
+			<div class="item active">
+			</div>
+			<div class="item">
+				<img src="/wp-content/uploads/2014/07/slide2.png" alt="Second slide">
+			</div>
+			<div class="item">
+				<img src="/wp-content/uploads/2014/07/slide3.png" alt="Third slide">
+			</div>
+		</div>
+		<!-- 轮播（Carousel）导航 -->
+		<a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+		<a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+	</div>
+
+	<script src="../js/jquery/jquery-1.11.1.js"></script>
+	<script src="../js/bootstrap/bootstrap.min.js"></script>
+	<script src="../js/other/Chart.min.js"></script>
+	<script src="../js/other/unslider.min.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			var dateArr = new Array(); // 日期数组
+			var maxTempArr = new Array(); // 最高温度数组
+			var minTempArr = new Array(); // 最低温度数组
+			
+			$('.banner').unslider();
+			var sendData = {
+				"cityId" : "CN101010100"//,
+				/* "beginDate" : "20151031",
+				"days" : "2" */
+			};
+			$.ajax({
+				url : "../weather/queryFutureInfo.do",
+				method : "get",
+				contentType : 'application/json;charset=UTF-8',
+				dataType : 'json',
+				data : sendData,
+				success : function(resData, textStatus, jqXHR) {
+					console.log(JSON.stringify(resData));
+					$(resData).each(function(index, element) {
+						dateArr[index] = element.date;
+						maxTempArr[index] = element.tmp.max;
+						minTempArr[index] = element.tmp.min;
+					});
+				var data = {
+						labels : dateArr,
+						datasets : [
+							{
+								fillColor : "rgba(220,220,220,0.5)",
+								strokeColor : "rgba(220,220,220,1)",
+								pointColor : "rgba(220,220,220,1)",
+								pointStrokeColor : "#fff",
+								data : maxTempArr
+							},
+							{
+								fillColor : "rgba(151,187,205,0.5)",
+								strokeColor : "rgba(151,187,205,1)",
+								pointColor : "rgba(151,187,205,1)",
+								pointStrokeColor : "#fff",
+								data : minTempArr
+							}
+						]
+					};
+					var ctx = $("#historyWeatherChart").get(0).getContext("2d");
+					new Chart(ctx).Line(data, {
+						scaleShowLabels : true,
+						scaleLabel : "<%=value %>℃",
+						bezierCurve : true
+					});
+				},
+				error : function(XMLHttpRequest, textStatus, errorThrown) {
+				}
+			});
+		});
+	</script>
+</body>
+</html>

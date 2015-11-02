@@ -3,50 +3,55 @@ package org.whocares.weather.web;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.whocares.weather.service.IWeatherService;
 
 @Controller
-@RequestMapping("/weather/{cityId}")
+@RequestMapping("/weather")
 public class WeatherController {
-	
+
 	@Autowired
 	private IWeatherService weatherService;
-	
-	@RequestMapping(value = "/city", produces = "application/json")
-	public String queryCity(@PathVariable String cityId) {
+
+	@RequestMapping(value = "/queryCity.do")
+	public @ResponseBody String queryCity(String cityId) {
 		return weatherService.queryCityInfo(cityId);
 	}
-	
-	@RequestMapping(value = "/aqi", produces = "application/json")
-	public String queryAirQuality(@PathVariable String cityId) {
+
+	@RequestMapping(value = "/queryAqi.do")
+	public @ResponseBody String queryAirQuality(String cityId) {
 		return weatherService.queryAirQualityInfo(cityId);
 	}
-	
-	@RequestMapping(value = "/realTimeInfo", produces = "application/json")
-	public String queryRealTimeWeather(@PathVariable String cityId) {
+
+	@RequestMapping(value = "/queryRealTimeInfo.do")
+	public @ResponseBody String queryRealTimeWeather(String cityId) {
 		return weatherService.queryRealTimeWeatherInfo(cityId);
 	}
-	
-	@RequestMapping(value = "/hourlyInfo", produces = "application/json")
-	public String queryHourlyWeather(@PathVariable String cityId) {
+
+	@RequestMapping(value = "/queryHourlyInfo.do")
+	public @ResponseBody String queryHourlyWeather(String cityId) {
 		return weatherService.queryHourlyWeatherInfo(cityId);
 	}
-	
-	@RequestMapping(value = "/futureInfo", produces = "application/json")
-	public String queryFutureWeather(@PathVariable String cityId) {
+
+	@RequestMapping(value = "/queryFutureInfo.do")
+	public @ResponseBody String queryFutureWeather(String cityId) {
 		return weatherService.queryFutureWeatherInfo(cityId);
 	}
-	
-	@RequestMapping(value = "/futureInfo/{beginDate}/{days}", produces = "application/json")
-	public String queryFutureWeather(@PathVariable String cityId, @PathVariable Date beginDate, @PathVariable int days) {
+
+	@RequestMapping(value = "/queryHistoryInfo.do")
+	public @ResponseBody String queryHistoryWeather(String cityId, 
+			@DateTimeFormat(pattern = "yyyyMMdd") Date beginDate, int days) {
 		return weatherService.queryHistoryWeatherInfo(cityId, beginDate, days);
 	}
-	
-	@RequestMapping(value = "/suggestion", produces = "application/json")
-	public String querySuggestion(@PathVariable String cityId) {
+
+	@RequestMapping(value = "/querySuggestion.do")
+	public @ResponseBody String querySuggestion(String cityId) {
 		return weatherService.querySuggestionInfo(cityId);
 	}
 }

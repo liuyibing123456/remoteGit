@@ -93,6 +93,9 @@ public class WeatherServiceImpl implements IWeatherService {
 			LOGGER.info("redis key is not exsit or is expired, prepare to query info through http...");
 			
 			HeWeather heWeather = this.getObjectFromHttp(cityId);
+			if (heWeather == null) {
+				return;
+			}
 			
 			String date = GlobalUtils.getCurrentDate();
 			
@@ -317,8 +320,14 @@ public class WeatherServiceImpl implements IWeatherService {
 		
 		LOGGER.debug("city : " + cityId);
 		
-		String value = GlobalUtils.readFileAsString("weather.json");//GlobalUtils.httpConnection(url, heads, params);//
-		LOGGER.info("responseStr : " + value);
+		String value = null;
+		try {
+			value = GlobalUtils.httpConnection(url, heads, params);//GlobalUtils.readFileAsString("weather.json");//
+		} catch (RuntimeException e) {
+			return null;
+		} finally {
+			LOGGER.info("responseStr : " + value);
+		}
 		
 		value = value.substring(value.indexOf("[") + 1, value.lastIndexOf("]"));
 		LOGGER.debug("after dealing responseStr : " + value);

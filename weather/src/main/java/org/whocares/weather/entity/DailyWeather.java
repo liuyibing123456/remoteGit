@@ -5,6 +5,7 @@ import java.util.Date;
 import org.whocares.weather.jackson.NormalDateDeserializer;
 import org.whocares.weather.jackson.NormalDateSerializer;
 import org.whocares.weather.jackson.TimeDeserializer;
+import org.whocares.weather.jackson.TimeSerializer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -80,12 +81,14 @@ public class DailyWeather extends Weather {
 		 */
 		@JsonProperty("sr")
 		@JsonDeserialize(using = TimeDeserializer.class)
+		@JsonSerialize(using = TimeSerializer.class)
 		private Date sunRiseTime;
 		/**
 		 * 日落时间
 		 */
 		@JsonProperty("ss")
 		@JsonDeserialize(using = TimeDeserializer.class)
+		@JsonSerialize(using = TimeSerializer.class)
 		private Date sunSetTime;
 
 		public Date getSunRiseTime() {

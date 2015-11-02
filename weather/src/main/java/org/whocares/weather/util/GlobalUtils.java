@@ -70,7 +70,7 @@ public class GlobalUtils {
 	 * @param heads
 	 * @param params
 	 */
-	public static String httpConnection(String url, Map<String, String> heads, Map<String, String> params) {
+	public static String httpConnection(String url, Map<String, String> heads, Map<String, String> params) throws RuntimeException {
 		HttpClient httpClient = new HttpClient();
 		httpClient.getParams().setParameter(HttpMethodParams.HTTP_URI_CHARSET, "utf-8");
 		GetMethod getMethod = new GetMethod(url);
@@ -92,13 +92,17 @@ public class GlobalUtils {
 		
 		try {
 			int stateCode = httpClient.executeMethod(getMethod);
-		    return stateCode == HttpStatus.SC_OK ? getMethod.getResponseBodyAsString() : null;
+			LOGGER.info("HttpStatus : " + stateCode);
+		    if (stateCode != HttpStatus.SC_OK) {
+		    	throw new RuntimeException("stateCode : " + stateCode);
+		    }
+		    return getMethod.getResponseBodyAsString();
 		} catch (HttpException e) {
-			e.printStackTrace();
-			return null;
+			LOGGER.error(e.getMessage(), e);
+			throw new RuntimeException(e);
 		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
+			LOGGER.error(e.getMessage(), e);
+			throw new RuntimeException(e);
 		} finally {
 			getMethod.releaseConnection();
 		}
