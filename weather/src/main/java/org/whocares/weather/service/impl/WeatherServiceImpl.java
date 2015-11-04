@@ -2,24 +2,11 @@ package org.whocares.weather.service.impl;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.BoundValueOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.whocares.weather.entity.AirQuality;
-import org.whocares.weather.entity.City;
-import org.whocares.weather.entity.DailyWeather;
-import org.whocares.weather.entity.HeWeather;
-import org.whocares.weather.entity.HourlyWeather;
-import org.whocares.weather.entity.RealTimeWeather;
-import org.whocares.weather.entity.Suggestion;
+import org.whocares.weather.dao.IWeatherDao;
+import org.whocares.weather.dao.template.AbstractProccessObjTemplate;
 import org.whocares.weather.service.IWeatherService;
 import org.whocares.weather.util.GlobalUtils;
 
@@ -27,50 +14,60 @@ import org.whocares.weather.util.GlobalUtils;
 public class WeatherServiceImpl implements IWeatherService {
 
 	@Autowired
-	private RedisTemplate<String, String> redisTemplate;
+	private AbstractProccessObjTemplate proccessObjTemplate;
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(WeatherServiceImpl.class);
+	@Autowired
+	private IWeatherDao weatherDao;
+	
+//	private static final Logger LOGGER = LoggerFactory.getLogger(WeatherServiceImpl.class);
 	
 	@Override
 	public String queryCityInfo(String cityId) {
-		this.queryWeatherInfoToCache(cityId);
-		return this.queryCityByCache(cityId);
+//		this.queryWeatherInfoToCache(cityId);
+		this.proccessObjTemplate.template(cityId);
+		return weatherDao.queryCityByCache(cityId);
 	}
 	
 	@Override
 	public String queryRealTimeWeatherInfo(String cityId) {
-		this.queryWeatherInfoToCache(cityId);
-		return this.queryRealTimeWeatherByCache(cityId);
+//		this.queryWeatherInfoToCache(cityId);
+		this.proccessObjTemplate.template(cityId);
+		return weatherDao.queryRealTimeWeatherByCache(cityId);
 	}
 	
 	@Override
 	public String queryAirQualityInfo(String cityId) {
-		this.queryWeatherInfoToCache(cityId);
-		return this.queryAirQualityByCache(cityId);
+//		this.queryWeatherInfoToCache(cityId);
+		this.proccessObjTemplate.template(cityId);
+		return weatherDao.queryAirQualityByCache(cityId);
 	}
 	
 	@Override
 	public String querySuggestionInfo(String cityId) {
-		this.queryWeatherInfoToCache(cityId);
-		return this.querySuggestionByCache(cityId);
+//		this.queryWeatherInfoToCache(cityId);
+		this.proccessObjTemplate.template(cityId);
+		return weatherDao.querySuggestionByCache(cityId);
 	}
 	
 	@Override
 	public String queryFutureWeatherInfo(String cityId) {
-		this.queryWeatherInfoToCache(cityId);
-		return this.queryFutureWeatherByCache(cityId);
+//		this.queryWeatherInfoToCache(cityId);
+		this.proccessObjTemplate.template(cityId);
+		return weatherDao.queryFutureWeatherByCache(cityId);
 	}
 	
 	@Override
 	public String queryHistoryWeatherInfo(String cityId, Date beginDate, int days) {
-		this.queryWeatherInfoToCache(cityId);
+//		this.queryWeatherInfoToCache(cityId);
+		this.proccessObjTemplate.template(cityId);
 		return this.queryHistoryWeatherByCache(cityId, beginDate, days);
 	}
 	
 	@Override
 	public String queryHourlyWeatherInfo(String cityId) {
-		this.queryWeatherInfoToCache(cityId);
-		return this.queryHourlyWeatherByCache(cityId);
+//		this.queryWeatherInfoToCache(cityId);
+		this.proccessObjTemplate.template(cityId);
+		return weatherDao.queryHourlyWeatherByCache(cityId);
 	}
 	
 	/*
@@ -80,7 +77,7 @@ public class WeatherServiceImpl implements IWeatherService {
 	 *                                                |
 	 *                                                 ——Y——> [put weather to redis] ——> {END}
 	 */
-	private void queryWeatherInfoToCache(String cityId) {
+	/*private void queryWeatherInfoToCache(String cityId) {
 		// 保存城市天气信息的超时标志，key不存在即超时，需重新获取该城市的天气信息
 		BoundValueOperations<String,String> bvOper = redisTemplate.boundValueOps("url.weather.city." + cityId);
 		String value = bvOper.get();
@@ -112,7 +109,7 @@ public class WeatherServiceImpl implements IWeatherService {
 			City city = heWeather.getCity();
 			cityBVOper.set(GlobalUtils.parseOject2Json(city));
 			
-			/*BoundHashOperations<String, String, Object> realTimeWeatherBHOper = redisTemplate.boundHashOps("info.weather.realTime." + cityId);
+			BoundHashOperations<String, String, Object> realTimeWeatherBHOper = redisTemplate.boundHashOps("info.weather.realTime." + cityId);
 			RealTimeWeather realTimeWeather = heWeather.getRealTimeWeather();
 			realTimeWeatherBHOper.put("sendibleTemperature", realTimeWeather.getSendibleTemperature());
 			realTimeWeatherBHOper.put("relativeHumidity", realTimeWeather.getRelativeHumidity());
@@ -121,13 +118,13 @@ public class WeatherServiceImpl implements IWeatherService {
 			realTimeWeatherBHOper.put("temperature", realTimeWeather.getTemperature());
 			realTimeWeatherBHOper.put("visibility", realTimeWeather.getVisibility());
 			realTimeWeatherBHOper.put("wind", realTimeWeather.getWind());
-			realTimeWeatherBHOper.put("weatherCondition", realTimeWeather.getWeatherCondition());*/
+			realTimeWeatherBHOper.put("weatherCondition", realTimeWeather.getWeatherCondition());
 			
 			BoundValueOperations<String, String> realTimeWeatherBVOper = redisTemplate.boundValueOps("info.weather.realTimeWeather." + date + "." + cityId);
 			RealTimeWeather realTimeWeather = heWeather.getRealTimeWeather();
 			realTimeWeatherBVOper.set(GlobalUtils.parseOject2Json(realTimeWeather));
 			
-			/*BoundHashOperations<String, String, Object> airQualityBHOper = redisTemplate.boundHashOps("info.weather.airQuality." + cityId);
+			BoundHashOperations<String, String, Object> airQualityBHOper = redisTemplate.boundHashOps("info.weather.airQuality." + cityId);
 			AirQuality airQuality = heWeather.getAirQuality();
 			airQualityBHOper.put("aqi", airQuality.getCityAQI().getAqi());
 			airQualityBHOper.put("co", airQuality.getCityAQI().getCo());
@@ -136,13 +133,13 @@ public class WeatherServiceImpl implements IWeatherService {
 			airQualityBHOper.put("pm10", airQuality.getCityAQI().getPm10());
 			airQualityBHOper.put("pm25", airQuality.getCityAQI().getPm25());
 			airQualityBHOper.put("qlty", airQuality.getCityAQI().getQlty());
-			airQualityBHOper.put("so2", airQuality.getCityAQI().getSo2());*/
+			airQualityBHOper.put("so2", airQuality.getCityAQI().getSo2());
 			
 			BoundValueOperations<String, String> airQualityBVOper = redisTemplate.boundValueOps("info.weather.airQuality." +date + "." + cityId);
 			AirQuality airQuality = heWeather.getAirQuality();
 			airQualityBVOper.set(GlobalUtils.parseOject2Json(airQuality));
 			
-			/*BoundHashOperations<String, String, Object> suggestionBHOper = redisTemplate.boundHashOps("info.weather.suggestion." + cityId);
+			BoundHashOperations<String, String, Object> suggestionBHOper = redisTemplate.boundHashOps("info.weather.suggestion." + cityId);
 			Suggestion suggestion = heWeather.getSuggestion();
 			suggestionBHOper.put("carWashingSuggestion", suggestion.getCarwashingSuggestion());
 			suggestionBHOper.put("coldSuggestion", suggestion.getColdSuggestion());
@@ -150,13 +147,13 @@ public class WeatherServiceImpl implements IWeatherService {
 			suggestionBHOper.put("dressingSuggestion", suggestion.getDressingSuggestion());
 			suggestionBHOper.put("sportSuggestion", suggestion.getSportSuggestion());
 			suggestionBHOper.put("tourismSuggestion", suggestion.getTourismSuggestion());
-			suggestionBHOper.put("ultravioletSuggestion", suggestion.getUltravioletSuggestion());*/
+			suggestionBHOper.put("ultravioletSuggestion", suggestion.getUltravioletSuggestion());
 			
 			BoundValueOperations<String, String> suggestionBVOper = redisTemplate.boundValueOps("info.weather.suggestion." + date + "." + cityId);
 			Suggestion suggestion = heWeather.getSuggestion();
 			suggestionBVOper.set(GlobalUtils.parseOject2Json(suggestion));
 			
-			/*List<DailyWeather> dailyWeatherList = heWeather.getDailyWeatherList();
+			List<DailyWeather> dailyWeatherList = heWeather.getDailyWeatherList();
 			for (DailyWeather dailyWeather : dailyWeatherList) {
 				BoundHashOperations<String, String, Object> dailyWeatherBHOper = redisTemplate.boundHashOps("info.weather.dailyWeather." + dailyWeather.getDate() + "." + cityId);
 				dailyWeatherBHOper.put("astronomy", dailyWeather.getAstronomy());
@@ -169,7 +166,7 @@ public class WeatherServiceImpl implements IWeatherService {
 				dailyWeatherBHOper.put("temper", dailyWeather.getTemper());
 				dailyWeatherBHOper.put("visibility", dailyWeather.getVisibility());
 				dailyWeatherBHOper.put("wind", dailyWeather.getWind());
-			}*/
+			}
 			
 			List<DailyWeather> dailyWeatherList = heWeather.getDailyWeatherList();
 			
@@ -181,7 +178,7 @@ public class WeatherServiceImpl implements IWeatherService {
 				dailyWeatherBVOper.set(GlobalUtils.parseOject2Json(dailyWeather));
 			}
 			
-			/*List<HourlyWeather> hourlyWeatherList = heWeather.getHourlyWeatherList();
+			List<HourlyWeather> hourlyWeatherList = heWeather.getHourlyWeatherList();
 			for (HourlyWeather hourlyWeather : hourlyWeatherList) {
 				BoundHashOperations<String, String, Object> hourlyWeatherBHOper = redisTemplate.boundHashOps("info.weather.hourlyWeather." + hourlyWeather.getDate() + "." + cityId);
 				hourlyWeatherBHOper.put("date", hourlyWeather.getDate());
@@ -190,23 +187,23 @@ public class WeatherServiceImpl implements IWeatherService {
 				hourlyWeatherBHOper.put("pressure", hourlyWeather.getPressure());
 				hourlyWeatherBHOper.put("temperature", hourlyWeather.getTemperature());
 				hourlyWeatherBHOper.put("wind", hourlyWeather.getWind());
-			}*/
+			}
 			
 			List<HourlyWeather> hourlyWeatherList = heWeather.getHourlyWeatherList();
 			BoundValueOperations<String, String> hourlyWeatherBVOper = redisTemplate.boundValueOps("info.weather.hourlyWeather." + date + "." + cityId);
 			hourlyWeatherBVOper.set(GlobalUtils.parseOject2Json(hourlyWeatherList));
-			/*for (HourlyWeather hourlyWeather : hourlyWeatherList) {
+			for (HourlyWeather hourlyWeather : hourlyWeatherList) {
 				BoundValueOperations<String, String> hourlyWeatherBHOper = redisTemplate.boundValueOps("info.weather.hourlyWeather." + GlobalUtils.parseDate("yyyy-MM-dd-HH:mm", hourlyWeather.getDate()) + "." + cityId);
 				hourlyWeatherBHOper.set(GlobalUtils.parseOject2Json(hourlyWeather));
-			}*/
+			}
 			
 			long timeout = Long.valueOf(GlobalUtils.getPropVal(GlobalUtils.CONFIG_PROPS, "timeout.weather.city"));
 			// 给超时标志的value值赋为城市id，无任何意义
 			bvOper.set(cityId, timeout, TimeUnit.SECONDS);
 		}
-	}
+	}*/
 
-	private String queryCityByCache(String cityId) {
+	/*private String queryCityByCache(String cityId) {
 		BoundValueOperations<String, String> cityBVOper = redisTemplate.boundValueOps("info.weather.city." + cityId);
 		String value = cityBVOper.get();
 		
@@ -218,9 +215,9 @@ public class WeatherServiceImpl implements IWeatherService {
 			cityBVOper.set(value);
 		}
 		return value;
-	}
+	}*/
 	
-	private String queryRealTimeWeatherByCache(String cityId) {
+	/*private String queryRealTimeWeatherByCache(String cityId) {
 		BoundValueOperations<String, String> realTimeWeatherBVOper = redisTemplate.boundValueOps("info.weather.realTimeWeather." + cityId);
 		String value = realTimeWeatherBVOper.get();
 		
@@ -232,9 +229,9 @@ public class WeatherServiceImpl implements IWeatherService {
 			realTimeWeatherBVOper.set(value);
 		}
 		return value;
-	}
+	}*/
 	
-	private String queryAirQualityByCache(String cityId) {
+	/*private String queryAirQualityByCache(String cityId) {
 		BoundValueOperations<String, String> airQualityBVOper = redisTemplate.boundValueOps("info.weather.airQuality." + cityId);
 		String value = airQualityBVOper.get();
 		
@@ -246,9 +243,9 @@ public class WeatherServiceImpl implements IWeatherService {
 			airQualityBVOper.set(value);
 		}
 		return value;
-	}
+	}*/
 	
-	private String querySuggestionByCache(String cityId) {
+	/*private String querySuggestionByCache(String cityId) {
 		BoundValueOperations<String, String> suggestionBVOper = redisTemplate.boundValueOps("info.weather.suggestion." + cityId);
 		String value = suggestionBVOper.get();
 		
@@ -260,9 +257,9 @@ public class WeatherServiceImpl implements IWeatherService {
 			suggestionBVOper.set(value);
 		}
 		return value;
-	}
+	}*/
 	
-	private String queryFutureWeatherByCache(String cityId) {
+	/*private String queryFutureWeatherByCache(String cityId) {
 		BoundValueOperations<String, String> dailyWeatherBVOper = redisTemplate.boundValueOps("info.weather.dailyWeather." + cityId);
 		String value = dailyWeatherBVOper.get();
 		
@@ -274,7 +271,7 @@ public class WeatherServiceImpl implements IWeatherService {
 			dailyWeatherBVOper.set(value);
 		}
 		return value;
-	}
+	}*/
 	
 	private String queryHistoryWeatherByCache(String cityId, Date beginDate, int days) {
 		Calendar calendar = Calendar.getInstance();
@@ -282,12 +279,13 @@ public class WeatherServiceImpl implements IWeatherService {
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
+		
+		calendar.add(Calendar.DAY_OF_MONTH, -days);
 		for (int i = 1; i <= days; i++) {
-			calendar.add(Calendar.DAY_OF_MONTH, -1);
-			BoundValueOperations<String, String> dailyWeatherBVOper = redisTemplate.boundValueOps("info.weather.dailyWeather." + GlobalUtils.parseDate("yyyy-MM-dd", calendar.getTime()) + "." + cityId);
-			String value = dailyWeatherBVOper.get();
+			calendar.add(Calendar.DAY_OF_MONTH, 1);
+			String value = weatherDao.queryDailyWeatherByCache(cityId, GlobalUtils.parseDate("yyyy-MM-dd", calendar.getTime()));
 			if (value == null)
-				break;
+				continue;
 			sb.append(value + ",");
 		}
 		sb.deleteCharAt(sb.length() - 1);
@@ -295,52 +293,4 @@ public class WeatherServiceImpl implements IWeatherService {
 		return sb.toString();
 	}
 	
-	private String queryHourlyWeatherByCache(String cityId) {
-		BoundValueOperations<String, String> hourlyWeatherBVOper = redisTemplate.boundValueOps("info.weather.hourlyWeather." + cityId);
-		String value = hourlyWeatherBVOper.get();
-		
-		if (value == null) {
-			HeWeather heWeather = this.getObjectFromHttp(cityId);
-			
-			List<HourlyWeather> hourlyWeatherList = heWeather.getHourlyWeatherList();
-			value = GlobalUtils.parseOject2Json(hourlyWeatherList);
-			hourlyWeatherBVOper.set(value);
-		}
-		return value;
-	}
-	
-	private HeWeather getObjectFromHttp(String cityId) {
-		String url = GlobalUtils.getPropVal(GlobalUtils.CONFIG_PROPS, "url.weather.city");
-		
-		Map<String, String> heads = new HashMap<String, String>();
-		heads.put("apikey", GlobalUtils.getPropVal(GlobalUtils.CONFIG_PROPS, "apikey"));
-		
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("cityid", cityId);
-		
-		LOGGER.debug("city : " + cityId);
-		
-		String value = null;
-		try {
-			value = GlobalUtils.httpConnection(url, heads, params);//GlobalUtils.readFileAsString("weather.json");//
-		} catch (RuntimeException e) {
-			return null;
-		} finally {
-			LOGGER.info("responseStr : " + value);
-		}
-		
-		value = value.substring(value.indexOf("[") + 1, value.lastIndexOf("]"));
-		LOGGER.debug("after dealing responseStr : " + value);
-		
-		HeWeather heWeather = GlobalUtils.parseResponseJson(value, HeWeather.class);
-		
-		// String successCode = "ok";
-		String successCode = GlobalUtils.getPropVal(GlobalUtils.ERRORCODE_PROPS, "error.info.ok");
-		if (!successCode.equals(heWeather.getStatus())) {
-			LOGGER.error("status : " + heWeather.getStatus());
-			return null;
-		}
-		return heWeather;
-	}
-
 }

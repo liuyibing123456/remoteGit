@@ -14,7 +14,7 @@
 	<script src="../js/other/echarts.js"></script>
 	<script src="../js/util.js"></script>
 	<script type="text/javascript">
-	function displayHourlyWeatherChart(dateArr, maxTemperArr, minTemperArr) {
+	function displayHourlyWeatherChart(timeArr, temperArr) {
 		// echarts.js 路径配置
 		require.config({
 	        paths: {
@@ -34,14 +34,14 @@
                 }); */
 				var option = {
 						title : {
-							text : '实时气温变化',
+							text : '实时天气变化',
 							subtext : '测试数据'
 						},
 						tooltip : {
 							trigger : 'axis'
 						},
 						legend : {
-							data : [ '最高气温', '最低气温' ],
+							data : [ '平均气温'],
 							x : 'right'
 						},
 						xAxis : [ {
@@ -49,12 +49,11 @@
 							boundaryGap : false,
 							axisLabel : {
 				                formatter: function(value) {
-				                	var date = new Date(value);
-				                	return (date.getMonth() + 1) + "/" + date.getDate();
+				                	return value.split(" ")[1];
 				                }
 				            },
 							/* scale : true, */
-							data : dateArr
+							data : timeArr
 						} ],
 						yAxis : [ {
 							type : 'value',
@@ -69,19 +68,19 @@
 						},
 						series : [
 							{
-								name:'最高气温',
+								name:'平均气温',
 						        type:'line',
 						        smooth:true,
 						        itemStyle: {normal: {lineStyle: {type: 'default'}}},
-						        data: maxTemperArr
-							},
+						        data: temperArr
+							}/* ,
 						    {
 								name:'最低气温',
 								type:'line',
 								smooth:true,
 								itemStyle: {normal: {lineStyle: {type: 'default'}}},
 								data: minTemperArr
-							}
+							} */
 						]
 					}
 					myChart.setOption(option);
@@ -96,18 +95,16 @@
 				dataType : 'json',
 				data : sendData,
 				success : function(resData, textStatus, jqXHR) {
-					var dateArr = new Array();
-					var maxTemperArr = new Array();
-					var minTemperArr = new Array();
+					var timeArr = new Array();
+					var temperArr = new Array();
 					
 					console.log(JSON.stringify(resData));
 					$(resData).each(function(index, element) {
-						dateArr[index] = element.date;
-						maxTemperArr[index] = element.tmp.max;
-						minTemperArr[index] = element.tmp.min;
+						timeArr[index] = element.date;
+						temperArr[index] = element.tmp;
 					});
-					
-					displayHourlyWeatherChart(dateArr, maxTemperArr, minTemperArr);
+					console.log(temperArr);
+					displayHourlyWeatherChart(timeArr, temperArr);
 				},
 				error : function(XMLHttpRequest, textStatus, errorThrown) {
 				}

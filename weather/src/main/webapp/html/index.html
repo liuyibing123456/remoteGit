@@ -14,7 +14,7 @@
 	<script src="../js/other/echarts.js"></script>
 	<script src="../js/util.js"></script>
 	<script type="text/javascript">
-	function displayHistoryWeatherChart(dateArr, maxTemperArr, minTemperArr) {
+	function displayHistoryWeatherChart(dateArr, maxTemperArr, minTemperArr, humidityArr) {
 		// echarts.js 路径配置
 		require.config({
 	        paths: {
@@ -25,7 +25,8 @@
 		require(
 			[
 			    'echarts',
-			    'echarts/chart/line'
+			    'echarts/chart/line',
+			    'echarts/chart/bar'
 			],
             function (ec) {
                 var myChart = ec.init(document.getElementById('historyWeatherChart'));
@@ -34,19 +35,19 @@
                 }); */
 				var option = {
 						title : {
-							text : '未来一周气温变化',
+							text : '最近一个月气温变化',
 							subtext : '测试数据'
 						},
 						tooltip : {
 							trigger : 'axis'
 						},
 						legend : {
-							data : [ '最高气温', '最低气温' ],
+							data : [ '最高气温', '最低气温', '相对湿度' ],
 							x : 'right'
 						},
 						xAxis : [ {
 							type : 'category',
-							boundaryGap : false,
+							boundaryGap : true,
 							axisLabel : {
 				                formatter: function(value) {
 				                	var date = new Date(value);
@@ -56,17 +57,29 @@
 							/* scale : true, */
 							data : dateArr
 						} ],
-						yAxis : [ {
+						yAxis : [{
 							type : 'value',
+							name : '温度',
 							axisLabel : {
 				                formatter: '{value} °C'
 				            }
-						} ],
-						grid : {
-							x : '40',
-							y : '60',
-							x2 : '20'
 						},
+						 {
+			            	type : 'value',
+			            	name : '湿度',
+							axisLabel : {
+				                formatter: '{value} %'
+				            }
+			            }],
+						grid : {
+							//x : '40',
+							y : '60'
+							//x2 : '60'
+						},
+						dataZoom: {
+					        show: true,
+					        start : 70
+					    },
 						series : [
 							{
 								name:'最高气温',
@@ -81,6 +94,13 @@
 								smooth:true,
 								itemStyle: {normal: {lineStyle: {type: 'default'}}},
 								data: minTemperArr
+							},
+							{
+								name:'相对湿度',
+								type:'bar',
+								yAxisIndex: 1,
+								barMaxWidth: 30,
+								data: humidityArr
 							}
 						]
 					}
@@ -88,9 +108,9 @@
 				});
 		}
 		$(function() {
-			var sendData = {"cityId" : "CN101010100"};
+			var sendData = {"cityId" : "CN101010100", "beginDate" : "20151110", "days" : "30"};
 			$.ajax({
-				url : "../weather/queryFutureInfo.do",
+				url : "../weather/queryHistoryInfo.do",
 				method : "get",
 				contentType : 'application/json;charset=UTF-8',
 				dataType : 'json',
@@ -99,15 +119,17 @@
 					var dateArr = new Array();
 					var maxTemperArr = new Array();
 					var minTemperArr = new Array();
+					var humidityArr = new Array();
 					
 					console.log(JSON.stringify(resData));
 					$(resData).each(function(index, element) {
 						dateArr[index] = element.date;
 						maxTemperArr[index] = element.tmp.max;
 						minTemperArr[index] = element.tmp.min;
+						humidityArr[index] = element.hum;
 					});
 					
-					displayHistoryWeatherChart(dateArr, maxTemperArr, minTemperArr);
+					displayHistoryWeatherChart(dateArr, maxTemperArr, minTemperArr, humidityArr);
 				},
 				error : function(XMLHttpRequest, textStatus, errorThrown) {
 				}
