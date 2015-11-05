@@ -46,6 +46,12 @@ public class WeatherController {
 			@DateTimeFormat(pattern = "yyyyMMdd") Date beginDate, int days) {
 		return weatherService.queryHistoryWeatherInfo(cityId, beginDate, days);
 	}
+	
+	@RequestMapping(value = "/queryDailyTemperInfo.do")
+	public @ResponseBody String queryDailyTemper(String cityId, 
+			@DateTimeFormat(pattern = "yyyyMMdd") Date beginDate, int days) {
+		return weatherService.queryDailyTemperInfo(cityId, beginDate, days);
+	}
 
 	@RequestMapping(value = "/querySuggestion.do")
 	public @ResponseBody String querySuggestion(String cityId) {

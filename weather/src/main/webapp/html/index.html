@@ -5,16 +5,50 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Insert title here</title>
 <link rel="stylesheet" href="../css/bootstrap.min.css">
+<style type="text/css">
+.del-blank {
+	margin-left:-15px;
+	//margin-right:0px;
+}
+</style>
 </head>
 <body>
-	<div id="historyWeatherChart" style="height:300px"></div>
+	<div class="container">
+	<div class="row">
+		<div class="col-xs-12 del-blank" style="background-color: #dedea8;">
+			<div id="dailyTemperChart" style="height:300px"></div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-4" style="background-color: #dedef8;">
+			<h3><small>湿度</small><br><span id="hum"></span></h3>
+		</div>
+		<div class="col-xs-4" style="background-color: #aedef8;">
+			<h3><small>可见度</small><br>6.4km</h3>
+		</div>
+		<div class="col-xs-4" style="background-color: #cedef8;">
+			<h3><small>东北风</small><br>1级</h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-4" style="background-color: #dedef8;">
+			<h3><small>湿度</small><br>80%</h3>
+		</div>
+		<div class="col-xs-4" style="background-color: #aedef8;">
+			<h3><small>可见度</small><br>6.4km</h3>
+		</div>
+		<div class="col-xs-4" style="background-color: #cedef8;">
+			<h3><small>东北风</small><br>1级</h3>
+		</div>
+	</div>
+</div>
 
+	<script src="../js/util.js"></script>
 	<script src="../js/jquery/jquery-1.11.1.js"></script>
 	<script src="../js/bootstrap/bootstrap.min.js"></script>
 	<script src="../js/other/echarts.js"></script>
-	<script src="../js/util.js"></script>
 	<script type="text/javascript">
-	function displayHistoryWeatherChart(dateArr, maxTemperArr, minTemperArr, humidityArr) {
+	function displayDailyTemperChart(dateArr, maxTemperArr, minTemperArr) {
 		// echarts.js 路径配置
 		require.config({
 	        paths: {
@@ -25,29 +59,47 @@
 		require(
 			[
 			    'echarts',
-			    'echarts/chart/line',
-			    'echarts/chart/bar'
+			    'echarts/chart/line'
+			    //'echarts/chart/bar'
 			],
             function (ec) {
-                var myChart = ec.init(document.getElementById('historyWeatherChart'));
+                var myChart = ec.init(document.getElementById('dailyTemperChart'));
                 /* myChart.showLoading({
                     text: '玩儿命加载中...'
                 }); */
 				var option = {
 						title : {
 							text : '最近一个月气温变化',
-							subtext : '测试数据'
+							subtext : '测试数据',
+							textStyle : {
+								fontSize: 16,
+							    fontWeight: 'bolder',
+							    color: '#333'
+							}
 						},
 						tooltip : {
+							//formatter : '{b}<br>max : {c}°C<br>min : {c1}°C',
+							formatter : function(params,ticket,callback) {
+								//console.log(JSON.stringify(params));
+								var res = params[0].name;
+								for (var i = 0; i < params.length; i++) {
+									res += '<br>' + params[i].seriesName + " : " + params[i].value + "℃";
+								}
+								setTimeout(function (){
+					                // 仅为了模拟异步回调
+					                callback(ticket, res);
+					            }, 500)
+								return "loading..."
+							},
 							trigger : 'axis'
 						},
 						legend : {
-							data : [ '最高气温', '最低气温', '相对湿度' ],
+							data : [ '最高气温', '最低气温'],
 							x : 'right'
 						},
 						xAxis : [ {
 							type : 'category',
-							boundaryGap : true,
+							boundaryGap : false,
 							axisLabel : {
 				                formatter: function(value) {
 				                	var date = new Date(value);
@@ -58,27 +110,22 @@
 							data : dateArr
 						} ],
 						yAxis : [{
+							show : true,
 							type : 'value',
-							name : '温度',
+							name : '(°C)',
 							axisLabel : {
-				                formatter: '{value} °C'
+				                formatter: '{value}'// °C'
 				            }
-						},
-						 {
-			            	type : 'value',
-			            	name : '湿度',
-							axisLabel : {
-				                formatter: '{value} %'
-				            }
-			            }],
+						}],
 						grid : {
-							//x : '40',
-							y : '60'
-							//x2 : '60'
+							x : '25',
+							y : '70',
+							x2 : '20'
 						},
 						dataZoom: {
 					        show: true,
-					        start : 70
+					        start : 70,
+					        handleSize : 15
 					    },
 						series : [
 							{
@@ -94,13 +141,6 @@
 								smooth:true,
 								itemStyle: {normal: {lineStyle: {type: 'default'}}},
 								data: minTemperArr
-							},
-							{
-								name:'相对湿度',
-								type:'bar',
-								yAxisIndex: 1,
-								barMaxWidth: 30,
-								data: humidityArr
 							}
 						]
 					}
@@ -108,7 +148,7 @@
 				});
 		}
 		$(function() {
-			var sendData = {"cityId" : "CN101010100", "beginDate" : "20151110", "days" : "30"};
+			var sendData = {"cityId" : "CN101010100", "beginDate" : "20151112", "days" : "30"};
 			$.ajax({
 				url : "../weather/queryHistoryInfo.do",
 				method : "get",
@@ -119,17 +159,23 @@
 					var dateArr = new Array();
 					var maxTemperArr = new Array();
 					var minTemperArr = new Array();
-					var humidityArr = new Array();
 					
 					console.log(JSON.stringify(resData));
+					
+					var today = getCurrentDate();
+					// 根据echart.js 规则，将当天日期特殊标记
+					var formatToday = {value: today, textStyle: {color: 'red', fontWeight: 'bolder', fontSize: '14'}};
 					$(resData).each(function(index, element) {
-						dateArr[index] = element.date;
+						if (element.date == today) {
+							dateArr[index] = formatToday;
+						} else {
+							dateArr[index] = element.date;
+						}
 						maxTemperArr[index] = element.tmp.max;
 						minTemperArr[index] = element.tmp.min;
-						humidityArr[index] = element.hum;
 					});
 					
-					displayHistoryWeatherChart(dateArr, maxTemperArr, minTemperArr, humidityArr);
+					displayDailyTemperChart(dateArr, maxTemperArr, minTemperArr);
 				},
 				error : function(XMLHttpRequest, textStatus, errorThrown) {
 				}

@@ -16,14 +16,17 @@ public class DailyTemperProccessObjTemplate extends CommonProcessObjTemplate {
 	}
 	
 	protected void cacheDailyTemperInfo(HeWeather heWeather, String cityId) throws RuntimeException {
-		BoundValueOperations<String, String> futureWeatherBVOper = this.getRedisTemplate().boundValueOps("info.weather.dailyWeather." + cityId);
 		
-		@SuppressWarnings("unchecked")
-		List<DailyWeather> dailyWeatherList = GlobalUtils.parseResponseJson(futureWeatherBVOper.get(), List.class);
+		List<DailyWeather> dailyWeatherList = heWeather.getDailyWeatherList();
 		
 		for (DailyWeather dailyWeather : dailyWeatherList) {
-			BoundValueOperations<String, String> dailyWeatherTemperBVOper = this.getRedisTemplate().boundValueOps("info.weather.dailyWeather.temper" + GlobalUtils.parseDate("yyyy-MM-dd", dailyWeather.getDate()) + "." + cityId);
-			dailyWeatherTemperBVOper.set(GlobalUtils.parseOject2Json(dailyWeather.getTemper()));
+			BoundValueOperations<String, String> dailyWeatherTemperBVOper = this.getRedisTemplate().boundValueOps("info.weather.dailyWeather.temper." + GlobalUtils.parseDate("yyyy-MM-dd", dailyWeather.getDate()) + "." + cityId);
+			
+			DailyWeather newInstance = new DailyWeather();
+			newInstance.setTemper(dailyWeather.getTemper());
+			newInstance.setDate(dailyWeather.getDate());
+			
+			dailyWeatherTemperBVOper.set(GlobalUtils.parseOject2Json(newInstance));
 		}
 	}
 }

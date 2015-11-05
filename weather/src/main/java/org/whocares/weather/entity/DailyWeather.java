@@ -54,6 +54,10 @@ public class DailyWeather extends Weather {
 		return temper;
 	}
 
+	public void setTemper(Temperature temper) {
+		this.temper = temper;
+	}
+
 	public static class Temperature {
 		/**
 		 * 最高温度

@@ -64,6 +64,12 @@ public class WeatherServiceImpl implements IWeatherService {
 	}
 	
 	@Override
+	public String queryDailyTemperInfo(String cityId, Date beginDate, int days) {
+		this.proccessObjTemplate.template(cityId);
+		return this.queryDailyTemperByCache(cityId, beginDate, days);
+	}
+	
+	@Override
 	public String queryHourlyWeatherInfo(String cityId) {
 //		this.queryWeatherInfoToCache(cityId);
 		this.proccessObjTemplate.template(cityId);
@@ -293,4 +299,24 @@ public class WeatherServiceImpl implements IWeatherService {
 		return sb.toString();
 	}
 	
+	private String queryDailyTemperByCache(String cityId, Date beginDate, int days) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(beginDate);
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+		
+		calendar.add(Calendar.DAY_OF_MONTH, -days);
+		for (int i = 1; i <= days; i++) {
+			calendar.add(Calendar.DAY_OF_MONTH, 1);
+			String value = weatherDao.queryDailyTemperByCache(cityId, GlobalUtils.parseDate("yyyy-MM-dd", calendar.getTime()));
+			if (value == null)
+				continue;
+			sb.append(value + ",");
+		}
+		sb.deleteCharAt(sb.length() - 1);
+		sb.append("]");
+		return sb.toString();
+	}
+
 }

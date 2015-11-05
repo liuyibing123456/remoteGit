@@ -54,4 +54,10 @@ public class WeatherImplDao implements IWeatherDao {
 		return dailyWeatherBVOper.get();
 	}
 
+	@Override
+	public String queryDailyTemperByCache(String cityId, String date) {
+		BoundValueOperations<String, String> dailyTemperBVOper = redisTemplate.boundValueOps("info.weather.dailyWeather.temper." + date + "." + cityId);
+		return dailyTemperBVOper.get();
+	}
+
 }

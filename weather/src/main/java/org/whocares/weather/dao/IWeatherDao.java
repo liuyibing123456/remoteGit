@@ -13,6 +13,8 @@ public interface IWeatherDao {
 	
 	String queryDailyWeatherByCache(String cityId, String date);
 	
+	String queryDailyTemperByCache(String cityId, String date);
+	
 	String queryHourlyWeatherByCache(String cityId);
 
 }

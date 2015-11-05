@@ -32,6 +32,6 @@
 	<!-- redis config end -->
 	
 	<!-- 注册通用解析对象到redis的模板类 -->
-	<bean class = "org.whocares.weather.dao.template.CommonProcessObjTemplate"/>
+	<bean class = "org.whocares.weather.dao.template.DailyTemperProccessObjTemplate"/>
 	
 </beans>
