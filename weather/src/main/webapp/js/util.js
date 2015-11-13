@@ -12,6 +12,11 @@ function getCurrentDate() {
     return year + "-" + month + "-" + date;
 }
 
+function getIndex(startDate, selectedDate) {
+	var time = new Date(selectedDate).getTime() - new Date(startDate).getTime();
+	return Math.floor(time / (1000 * 60 * 60 * 24));
+}
+
 function timeStamp2String(time){  
     var datetime = new Date();  
     datetime.setTime(time);  
