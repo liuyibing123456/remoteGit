@@ -7,9 +7,12 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
@@ -70,18 +73,21 @@ public class GlobalUtils {
 	 * @param heads
 	 * @param params
 	 */
-	public static String httpConnection(String url, Map<String, String> heads, Map<String, String> params) throws RuntimeException {
+	public static String httpConnection(String url, Map<String, String> heads, Map<String, String> params) throws NullPointerException, RuntimeException {
+		if(url == null) {
+			throw new NullPointerException("param [ url ] is null");
+		}
 		HttpClient httpClient = new HttpClient();
 		httpClient.getParams().setParameter(HttpMethodParams.HTTP_URI_CHARSET, "utf-8");
 		GetMethod getMethod = new GetMethod(url);
 		
-		if (heads != null) {
+		if (heads != null && heads.size() != 0) {
 			for (String key : heads.keySet()) {
 				getMethod.addRequestHeader(key, heads.get(key));
 			}
 		}
 		
-		if (params != null) {
+		if (params != null && params.size() != 0) {
 			// map convert to array
 			List<NameValuePair> list = new ArrayList<NameValuePair>();
 			for (String key : params.keySet()) {
@@ -113,7 +119,7 @@ public class GlobalUtils {
 		try {
 			return objectMapper.readValue(jsonStr, clazz);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			return null;
 		}
 	}
@@ -122,7 +128,7 @@ public class GlobalUtils {
 		try {
 			return objectMapper.writeValueAsString(object);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			return null;
 		}
 	}
@@ -139,7 +145,7 @@ public class GlobalUtils {
 			}
 			return sb.toString();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 			return null;
 		}
 	}
@@ -152,5 +158,20 @@ public class GlobalUtils {
 	public static String getCurrentDate() {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		return formatter.format(new Date());
+	}
+	
+	public static void parseJsonToCache(String file) {
+		if(file == null) {
+			file = "cityCode.json";
+		}
+		
+		String jsonStr = readFileAsString(file);
+		ArrayList<Map<String, String>> list = parseResponseJson(jsonStr, new ArrayList<HashMap<String, String>>().getClass());
+		
+		Set<String> provinceSet = new HashSet<String>();
+		
+		for(Map<String, String> map : list) {
+			provinceSet.add(map.get("provinceCN"));
+		}
 	}
 }
