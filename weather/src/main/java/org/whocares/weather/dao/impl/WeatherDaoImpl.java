@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.whocares.weather.dao.IWeatherDao;
 
 @Repository("weatherDao")
-public class WeatherImplDao implements IWeatherDao {
+public class WeatherDaoImpl implements IWeatherDao {
 	
 	@Autowired
 	private RedisTemplate<String, String> redisTemplate;

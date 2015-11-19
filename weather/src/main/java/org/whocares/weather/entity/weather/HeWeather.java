@@ -1,4 +1,4 @@
-package org.whocares.weather.entity;
+package org.whocares.weather.entity.weather;
 
 import java.util.List;
 

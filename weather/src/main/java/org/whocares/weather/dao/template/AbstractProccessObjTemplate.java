@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.whocares.weather.entity.HeWeather;
+import org.whocares.weather.entity.weather.HeWeather;
 import org.whocares.weather.util.GlobalUtils;
 
 public abstract class AbstractProccessObjTemplate {

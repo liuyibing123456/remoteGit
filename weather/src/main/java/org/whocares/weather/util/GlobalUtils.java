@@ -7,12 +7,9 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
@@ -39,6 +36,8 @@ public class GlobalUtils {
 	 * errorCode.properties 文件名
 	 */
 	public static final String ERRORCODE_PROPS = "errorCode.properties";
+	
+	public static final String CITYCODE_JSON = "cityCode.json";
 	
 	private static final ObjectMapper objectMapper = new ObjectMapper();
 	
@@ -160,18 +159,4 @@ public class GlobalUtils {
 		return formatter.format(new Date());
 	}
 	
-	public static void parseJsonToCache(String file) {
-		if(file == null) {
-			file = "cityCode.json";
-		}
-		
-		String jsonStr = readFileAsString(file);
-		ArrayList<Map<String, String>> list = parseResponseJson(jsonStr, new ArrayList<HashMap<String, String>>().getClass());
-		
-		Set<String> provinceSet = new HashSet<String>();
-		
-		for(Map<String, String> map : list) {
-			provinceSet.add(map.get("provinceCN"));
-		}
-	}
 }

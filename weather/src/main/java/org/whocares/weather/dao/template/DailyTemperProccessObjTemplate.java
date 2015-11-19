@@ -3,8 +3,8 @@ package org.whocares.weather.dao.template;
 import java.util.List;
 
 import org.springframework.data.redis.core.BoundValueOperations;
-import org.whocares.weather.entity.DailyWeather;
-import org.whocares.weather.entity.HeWeather;
+import org.whocares.weather.entity.weather.DailyWeather;
+import org.whocares.weather.entity.weather.HeWeather;
 import org.whocares.weather.util.GlobalUtils;
 
 public class DailyTemperProccessObjTemplate extends CommonProcessObjTemplate {

@@ -1,11 +1,12 @@
 package org.whocares.weather.service;
 
 public interface ICityService {
-	/**
-	 * 
-	 * @return
-	 */
-	String queryCityInfo(String cityName);
 	
-	String queryCityList(String cityName);
+	String queryProvinceList();
+	
+	String queryCityList(String province);
+	
+	String queryDistrictList(String province, String city);
+	
+	void cacheCityInfo();
 }

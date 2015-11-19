@@ -3,13 +3,13 @@ package org.whocares.weather.dao.template;
 import java.util.List;
 
 import org.springframework.data.redis.core.BoundValueOperations;
-import org.whocares.weather.entity.AirQuality;
-import org.whocares.weather.entity.City;
-import org.whocares.weather.entity.DailyWeather;
-import org.whocares.weather.entity.HeWeather;
-import org.whocares.weather.entity.HourlyWeather;
-import org.whocares.weather.entity.RealTimeWeather;
-import org.whocares.weather.entity.Suggestion;
+import org.whocares.weather.entity.weather.AirQuality;
+import org.whocares.weather.entity.weather.City;
+import org.whocares.weather.entity.weather.DailyWeather;
+import org.whocares.weather.entity.weather.HeWeather;
+import org.whocares.weather.entity.weather.HourlyWeather;
+import org.whocares.weather.entity.weather.RealTimeWeather;
+import org.whocares.weather.entity.weather.Suggestion;
 import org.whocares.weather.util.GlobalUtils;
 
 public class CommonProcessObjTemplate extends AbstractProccessObjTemplate {

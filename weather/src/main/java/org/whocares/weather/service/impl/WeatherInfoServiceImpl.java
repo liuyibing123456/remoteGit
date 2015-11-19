@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.whocares.weather.domain.CityInfoResponsePackage;
 import org.whocares.weather.service.IWeatherInfoService;
-import org.whocares.weather.template.AbstractProcessTemplate;
-import org.whocares.weather.template.ProcessTemplate;
 import org.whocares.weather.util.GlobalUtils;
 
 @Service("weatherInfoService")
