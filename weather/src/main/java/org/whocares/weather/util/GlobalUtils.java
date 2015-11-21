@@ -23,6 +23,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class GlobalUtils {
@@ -117,6 +118,23 @@ public class GlobalUtils {
 	public static <T> T parseResponseJson(String jsonStr, Class<T> clazz) {
 		try {
 			return objectMapper.readValue(jsonStr, clazz);
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
+			return null;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param jsonStr 需要解析的json字符串
+	 * @param beanClass 集合泛型类型
+	 * @return List<T> 集合
+	 */
+	public static <T> List<T> parseResponseListJson(String jsonStr, Class<T> beanClass) {
+		JavaType javaType = objectMapper.getTypeFactory().constructCollectionType(List.class, beanClass);
+		
+		try {
+			return objectMapper.readValue(jsonStr, javaType);
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
 			return null;
