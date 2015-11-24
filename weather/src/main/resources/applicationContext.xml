@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx.xsd
            http://www.springframework.org/schema/context
-       	http://www.springframework.org/schema/context/spring-context.xsd" default-lazy-init="true">
+           http://www.springframework.org/schema/context/spring-context.xsd"
+	default-lazy-init="true">
 
 	<context:component-scan base-package="org.whocares.weather" />
 	
 	<!-- redis config begin -->
 	<context:property-placeholder location="classpath:redis.properties" />
-	
+
 	<bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" >
 		<property name="hostName" value="${redis.host}" />
 		<property name="port" value="${redis.port}" />
@@ -27,10 +32,12 @@
     </bean>
     
      <bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
-        <property name="connectionFactory"   ref="jedisConnFactory" />
+        <property name="connectionFactory" ref="jedisConnFactory" />
+        <property name="enableTransactionSupport" value="true" /><!-- 开启事务 -->
     </bean>
 	<!-- redis config end -->
 	
+	<tx:annotation-driven proxy-target-class="false" />
 	<!-- 注册通用解析对象到redis的模板类 -->
 	<bean class = "org.whocares.weather.dao.template.DailyTemperProccessObjTemplate"/>
 	
