@@ -65,5 +65,13 @@ public class GlobalUtilsTest {
 		JsonGenerator jsonGenerator = new JsonFactory().createJsonGenerator(new File("cityCode.json"), JsonEncoding.UTF8);
 		ObjectMapper mapper = new ObjectMapper();
 	}
+	
+	@Test
+	public void test() {
+		char a = 27;
+		String str = "2146101103存放境外同业活期款项*POST";
+		System.out.println(str);
+		System.out.println(str.replace(a, 'A'));
+	}
 
 }

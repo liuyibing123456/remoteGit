@@ -9,8 +9,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.whocares.weather.entity.HeWeather;
-import org.whocares.weather.service.IWeatherService;
+import org.whocares.weather.app.entity.weather.HeWeather;
+import org.whocares.weather.app.service.IWeatherService;
+import org.whocares.weather.app.service.impl.WeatherServiceImpl;
 
 public class WeatherServiceImplTest {
 

@@ -1,40 +1,74 @@
 package org.whocares.weather.service.impl;
 
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.whocares.weather.service.ICityService;
+import org.whocares.weather.app.entity.city.City;
+import org.whocares.weather.app.service.ICityService;
+import org.whocares.weather.app.service.impl.CityServiceImpl;
+import org.whocares.weather.util.GlobalUtils;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 
 public class CityServiceImplTest {
-
-	@Test
-	public void testQueryCityInfo() {
+	
+	private ICityService cityService;
+	@Before
+	public void init() {
 		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-		ICityService service = context.getBean("cityService", CityServiceImpl.class);
-		service.queryCityInfo("北京");
+		cityService = context.getBean("cityService", CityServiceImpl.class);
+	}
+	
+	@Test
+	public void testQueryProvinceList() {
+		String str = cityService.queryProvinceList();
+		System.out.println(str.split(",").length);
+		System.out.println(str);
 	}
 	
 	@Test
 	public void testQueryCityList() {
-		ICityService service = new CityServiceImpl();
-		service.queryCityList("海淀");
-		//service.queryCityList("haidian");
-		String repsonse = "{\"errNum\": 0, \"retMsg\": \"success\", \"retData\": { \"cityName\": \"北京\", \"provinceName\": \"北京\", \"cityCode\": \"101010100\", \"zipCode\": \"100000\", \"telAreaCode\": \"010\" } } ";
+		String province = "鍚夋灄";
+		String str = cityService.queryCityList(province);
+		System.out.println(str.split(",").length);
+		System.out.println(str);
 	}
 	
 	@Test
+	public void testQueryDistrictList() {
+		String province = "鍚夋灄";
+		String city = "鐧藉煄";
+		String str = cityService.queryDistrictList(province, city);
+		System.out.println(str.split(",").length);
+		System.out.println(str);
+	}
+	
+	@Test
+	public void testCacheCityInfo() {
+		cityService.cacheCityInfo();
+		
+	}
+
+	@Test
 	public void test() {
-		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-		System.out.println("==========================");
-//		RedisTemplate<String, String> redisTemplate = context.getBean("redisTemplate", StringRedisTemplate.class);
-		RedisTemplate<String, String> template = context.getBean("redisTemplate", RedisTemplate.class);
-		String value = template.boundValueOps("org.whocares.tes").get();
-		System.out.println(value == null);
-		System.out.println("==========================");
+		String jsonStr = GlobalUtils.readFileAsString(GlobalUtils.CITYCODE_JSON);
+		System.out.println(jsonStr);
+//		ArrayList list = GlobalUtils.parseResponseJson(jsonStr, ArrayList.class);
+//		System.out.println(list.getDistrictId());
+		ArrayList<City> list = (ArrayList<City>)GlobalUtils.parseResponseListJson(jsonStr, City.class);
+		System.out.println(list);
+		for(City city : list) {
+			System.out.println(city.getDistrictId());
+		}
 	}
 
 }

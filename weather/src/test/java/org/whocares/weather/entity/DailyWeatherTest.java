@@ -1,6 +1,7 @@
 package org.whocares.weather.entity;
 
 import org.junit.Test;
+import org.whocares.weather.app.entity.weather.DailyWeather;
 import org.whocares.weather.util.GlobalUtils;
 
 public class DailyWeatherTest {

@@ -12,7 +12,7 @@
             http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
 	<!-- 只需扫描@Controller，否则与applicationContext.xml下的扫描组件冲突 -->
-	<context:component-scan base-package="org.whocares.weather.web" />
+	<context:component-scan base-package="org.whocares.weather.app.web" />
 	
 	<!-- 解决stringHttpMessageConverter乱码问题 -->
 	<bean id= "stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
