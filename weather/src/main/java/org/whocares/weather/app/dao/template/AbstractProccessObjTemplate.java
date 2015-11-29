@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.whocares.weather.app.entity.weather.HeWeather;
@@ -21,11 +22,14 @@ public abstract class AbstractProccessObjTemplate {
 		return this.redisTemplate;
 	}
 	
+	private final boolean isReadLocal = Boolean.valueOf(GlobalUtils.getPropVal(GlobalUtils.CONFIG_PROPS, "flag.readLocal"));
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractProccessObjTemplate.class);
 	
 	public final void template(String cityId) {
 		if (!this.isCached(cityId)) {
 			LOGGER.info("redis key is not exsit or is expired, prepare to query weather info through http...");
+			
 			
 			HeWeather heWeather = this.getObjectFromHttp(cityId);
 			if (heWeather == null) {
@@ -65,7 +69,12 @@ public abstract class AbstractProccessObjTemplate {
 	private boolean isCached(String cityId) {
 		// 保存城市天气信息的超时标志，key不存在即超时，需重新获取该城市的天气信息
 		BoundValueOperations<String,String> bvOper = redisTemplate.boundValueOps("url.weather.city." + cityId);
-		return !(bvOper.get() == null);
+		try {
+			return !(bvOper.get() == null);
+		} catch(RedisConnectionFailureException e) {
+			LOGGER.error(e.getMessage(), e);
+			return true;
+		}
 	}
 	
 	private void setExpired(String cityId) {
@@ -93,7 +102,7 @@ public abstract class AbstractProccessObjTemplate {
 		
 		String value = null;
 		try {
-			value = GlobalUtils.httpConnection(url, heads, params);//GlobalUtils.readFileAsString("weather.json");//
+			value = isReadLocal ? GlobalUtils.readFileAsString("weather.json") : GlobalUtils.httpConnection(url, heads, params);
 		} catch (RuntimeException e) {
 			return null;
 		} finally {

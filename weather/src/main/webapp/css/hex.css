@@ -1,0 +1,53 @@
+.hex_container {
+	padding-top: 80px;
+	padding-left: 75px;
+}
+
+.hex_container .hex {
+	float: left;
+	margin-right: 4px;
+}
+
+.hex_container .hex .hexagonal_top {
+	/* float: left; */
+	width: 0;
+	border-bottom: 30px solid #545455;
+	border-left: 52px solid transparent;
+	border-right: 52px solid transparent;
+}
+
+.hex_container .hex .hexagonal_middle {
+	/* float: left; */
+	width: 104px;
+	height: 60px;
+	background-color: #545455;
+	text-align: center;
+	line-height: 60px;
+}
+
+.hex_container .hex .hexagonal_middle span {
+	font-size: 30px;
+	color: #FFFFFF;
+}
+
+.hex_container .hex .hexagonal_bottom {
+	/* float: left; */
+	width: 0;
+	border-top: 30px solid #545455;
+	border-left: 52px solid transparent;
+	border-right: 52px solid transparent;
+}
+
+.hex_container .hex_next_I {
+	clear: left;
+	margin-left: 54px;
+}
+
+.hex_container .hex_next_II {
+	clear: left;
+	margin-left: -54px;
+}
+
+.hex_container .hex_row {
+	margin-top: -26px;
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>六边形</title>
+<style>
+.hexagonal_top {
+	width: 0;
+	border-bottom: 30px solid #6C6;
+	border-left: 52px solid transparent;
+	border-right: 52px solid transparent;
+}
+
+.hexagonal_middle {
+	width: 104px;
+	height: 60px;
+	background-color: #6C6;
+	text-align: center;
+	line-height: 60px;
+}
+
+.hexagonal_middle span {
+	/* display: inline-block; */
+	/* text-align: center; */
+}
+
+.hexagonal_bottom {
+	width: 0;
+	border-top: 30px solid #6C6;
+	border-left: 52px solid transparent;
+	border-right: 52px solid transparent;
+}
+</style>
+</head>
+<body>
+<div class="hex">
+	<div class="hexagonal_top"></div>
+	<div class="hexagonal_middle"><span>18℃</span></div>
+	<div class="hexagonal_bottom"></div>
+</div>
+</body>
+</html>
