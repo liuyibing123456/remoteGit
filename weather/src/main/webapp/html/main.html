@@ -34,10 +34,31 @@
 
 .weather_info_bar .temper {
 	height: 40px;
-	font-size: 25px;
+	font-size: 17px;
 	line-height: 40px;
 	font-weight: bolder;
 	color: #FFFFFF;
+}
+
+.circle {
+	margin: 50px auto 0px auto;
+	width: 300px;
+	height: 300px;
+	background-color: #545455;
+	-webkit-border-radius: 150px;
+	border-radius: 150px;
+}
+
+.circle .circle_left {
+	width: 40%;
+	height: 100%;
+	float: left;
+}
+
+.circle .circle_right {
+	width: 60%;
+	height: 100%;
+	float: left;
 }
 </style>
 </head>
@@ -50,43 +71,9 @@
 	</div>
 	<div class="row">
 		<div class="col-xs-12">
-			<div class="hex_container">
-				<div class="hex">
-					<div class="hexagonal_top"></div>
-					<div class="hexagonal_middle"><span>18℃</span></div>
-					<div class="hexagonal_bottom"></div>
-				</div>
-				<div class="hex">
-					<div class="hexagonal_top"></div>
-					<div class="hexagonal_middle"><span>18℃</span></div>
-					<div class="hexagonal_bottom"></div>
-				</div>
-				<div class="hex hex_next_II hex_row">
-					<div class="hexagonal_top"></div>
-					<div class="hexagonal_middle"><span>18℃</span></div>
-					<div class="hexagonal_bottom"></div>
-				</div>
-				<div class="hex hex_row">
-					<div class="hexagonal_top"></div>
-					<div class="hexagonal_middle"><span>18℃</span></div>
-					<div class="hexagonal_bottom"></div>
-				</div>
-				<div class="hex hex_row">
-					<div class="hexagonal_top"></div>
-					<div class="hexagonal_middle"><span>18℃</span></div>
-					<div class="hexagonal_bottom"></div>
-				</div>
-				<div class="hex hex_row">
-					<div class="hexagonal_top"></div>
-					<div class="hexagonal_middle"><span>18℃</span></div>
-					<div class="hexagonal_bottom"></div>
-				</div>
-				<div class="hex hex_row">
-					<div class="hexagonal_top"></div>
-					<div class="hexagonal_middle"><span>18℃</span></div>
-					<div class="hexagonal_bottom"></div>
-				</div>
-				<div style="clear:both"></div>
+			<div class="circle">
+				<div class="circle_left"></div>
+				<div class="circle_right"></div>
 			</div>
 		</div>
 	</div>
@@ -95,27 +82,27 @@
 			<div class="weather_info_bar">
 				<div class="week">周一</div>
 				<img alt="" src="../image/code/100.png" class="img-responsive center-block">
-				<div class="temper">16℃</div>
+				<div class="temper">11~16°</div>
 			</div>
 			<div class="weather_info_bar">
 				<div class="week">周二</div>
 				<img alt="" src="../image/code/101.png" class="img-responsive center-block">
-				<div class="temper">12℃</div>
+				<div class="temper">4~12°</div>
 			</div>
 			<div class="weather_info_bar">
 				<div class="week">周三</div>
 				<img alt="" src="../image/code/102.png" class="img-responsive center-block">
-				<div class="temper">11℃</div>
+				<div class="temper">-9~11°</div>
 			</div>
 			<div class="weather_info_bar">
 				<div class="week">周四</div>
 				<img alt="" src="../image/code/103.png" class="img-responsive center-block">
-				<div class="temper">10℃</div>
+				<div class="temper">-10~-21°</div>
 			</div>
 			<div class="weather_info_bar">
 				<div class="week">周五</div>
 				<img alt="" src="../image/code/104.png" class="img-responsive center-block">
-				<div class="temper">19℃</div>
+				<div class="temper">0~9°</div>
 			</div>
 		</div>
 	</div>
