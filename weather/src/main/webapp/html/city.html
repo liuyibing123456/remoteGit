@@ -41,7 +41,7 @@
 </style>
 </head>
 <body>
-<div class="container">
+<div class="container" ng-app="cityApp">
 	<div class="row top_blank">
 		<div class="col-xs-12">
 			<div class="title_bar">北京 · 丰台</div>
@@ -62,16 +62,61 @@
 			<div class="title_bar title_bar_color_3">朝阳</div>
 		</div>
 	</div>
-	<div class="row top_blank">
-		<div class="col-xs-12">
-			<div class="title_bar title_bar_color_4">朝阳</div>
+	<div class="row navbar-fixed-bottom">
+		<div class="col-xs-4" ng-controller="provinceCtrl">
+			<select class="form-control" ng-model="province" ng-options="data as data for data in provinceList">
+			</select>
 		</div>
+		<div class="col-xs-4" ng-controller="cityCtrl">
+			<select class="form-control" id="city">
+				<option value="{{ data }}" ng-repeat="data in provinceList">{{ data }}</option>
+			</select>
+		</div>
+		<!-- <div class="col-xs-4" ng-controller="districtCtrl">
+			<select class="form-control" id="district">
+				<option value="{{ data }}" ng-repeat="data in provinceList">{{ data }}</option>
+			</select>
+		</div> -->
 	</div>
 </div>
 <script src="../js/jquery/jquery-1.11.1.js"></script>
 <script src="../js/bootstrap/bootstrap.min.js"></script>
 <script src="../js/angular/angular.js"></script>
 <script type="text/javascript">
+var app = angular.module('cityApp', []);
+app.controller('provinceCtrl', function($scope, $http) {
+	$http({
+		method : "get",
+		contentType : 'application/json;charset=UTF-8',
+		dataType : 'json',
+		url : "../city/queryProvinces.do"
+	}).success(function(data, status) {
+        //$scope.status = status;
+        $scope.provinceList = data;
+        //alert($scope.provinceList);
+     }).error(function(data, status) {
+       //$scope.data = data || "Request failed";
+       //$scope.status = status;
+   });
+});
+
+app.controller('cityCtrl', function($scope, $http) {
+	var sendData = {"cityId" : "CN101010100", "beginDate" : "20151117", "days" : "30"};
+	$http({
+		method : "get",
+		contentType : 'application/json;charset=UTF-8',
+		dataType : 'json',
+		url : "../city/queryProvinces.do",
+		data : ""
+	}).success(function(data, status) {
+        //$scope.status = status;
+        $scope.provinceList = data;
+        //alert($scope.provinceList);
+     }).error(function(data, status) {
+       //$scope.data = data || "Request failed";
+       //$scope.status = status;
+   });
+});
 </script>
 </body>
 </html>

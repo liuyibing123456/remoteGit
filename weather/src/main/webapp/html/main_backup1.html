@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/bootstrap.min.css">
+<link rel="stylesheet" href="../css/global.css">
+<link rel="stylesheet" href="../css/hex.css">
+<style type="text/css">
+.col-xs-2 {
+	height: 100px;
+	background-color : rgba(100,100,102,0.4);
+	border-right-color: #FFFFFF;
+	border-right-width: 1px;
+}
+
+.weather_info_bar {
+	height: 150px;
+	width: 20%;
+	background-color : rgba(100,100,102,0.4);
+	border-left: 1px solid #4A4A4A;
+	text-align: center;
+	float : left;
+}
+
+.weather_info_bar .week {
+	height: 30px;
+	font-size: 15px;
+	line-height: 30px;
+	font-weight: bolder;
+	color: #FFFFFF;
+}
+
+.weather_info_bar .temper {
+	height: 40px;
+	font-size: 17px;
+	line-height: 40px;
+	font-weight: bolder;
+	color: #FFFFFF;
+}
+
+.circle {
+	margin: 50px auto 0px auto;
+	width: 300px;
+	height: 300px;
+	background-color: #545455;
+	-webkit-border-radius: 150px;
+	border-radius: 150px;
+}
+
+.circle .circle_left {
+	width: 40%;
+	height: 100%;
+	float: left;
+}
+
+.circle .circle_right {
+	width: 60%;
+	height: 100%;
+	float: left;
+}
+</style>
+</head>
+<body>
+<div class="container" ng-app="mainApp" ng-controller="mainCtrl">
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="global_title">丰台</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="circle">
+				<div class="circle_left"></div>
+				<div class="circle_right"></div>
+			</div>
+		</div>
+	</div>
+	<div class="row navbar-fixed-bottom">
+		<div class="col-xs-12">
+			<div class="weather_info_bar" ng-repeat="data in array">
+				<div class="week">{{ data.weekday }}</div>
+				<img alt="" ng-src="../image/code/{{ data.img }}.png" class="img-responsive center-block">
+				<div class="temper">{{ data.temper }}</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="../js/jquery/jquery-1.11.1.js"></script>
+<script src="../js/bootstrap/bootstrap.min.js"></script>
+<script src="../js/angular/angular.js"></script>
+<script type="text/javascript">
+var app = angular.module('mainApp', []);
+app.controller('mainCtrl', function($scope) {
+	$scope.array = [{weekday:'周一', img:'100', temper:'11~16°'},
+                          {weekday:'周二', img:'101', temper:'4~12°'},
+                          {weekday:'周三', img:'102', temper:'4~12°'},
+                          {weekday:'周四', img:'103', temper:'4~12°'},
+                          {weekday:'周五', img:'104', temper:'-9~11°'}];
+});
+</script>
+</body>
+</html>
