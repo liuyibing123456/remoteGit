@@ -104,6 +104,12 @@
 <script src="../js/angular/angular.js"></script>
 <script src="../js/other/iscroll-lite.js"></script>
 <script type="text/javascript">
+function pullRightAction(array) {
+	newArray = [{date:'周一', cond:{code_d:'100', code_n:'101', txt_d:'晴', txt_n:'阴'}, tmp:{max:'11', min:'16'}},
+				{date:'周五', cond:{code_d:'104', code_n:'104', txt_d:'晴', txt_n:'阴'}, tmp:{max:'-9', min:'-1'}}];
+	return array.concat(newArray);
+}
+
 var app = angular.module('mainApp', []);
 app.controller('mainCtrl', function($scope, $http) {
 	$scope.dailyForecast = [{date:'周一', cond:{code_d:'100', code_n:'101', txt_d:'晴', txt_n:'阴'}, tmp:{max:'11', min:'16'}},
@@ -121,12 +127,13 @@ app.controller('mainCtrl', function($scope, $http) {
 		eventPassthrough: true,
 		scrollX: true,
 		scrollY: false,
-		preventDefault: false
+		preventDefault: true
 	});
 	myScroll.on('scrollEnd', function() {
 		//alert(this.x + " : " + this.maxScrollX);
 		 if (this.x - this.maxScrollX == 0) {
-             //pullRightAction();
+			 $scope.dailyForecast = pullRightAction($scope.dailyForecast);
+			 console.log($scope.dailyForecast);
 			 myScroll.refresh();
          }
 	});
