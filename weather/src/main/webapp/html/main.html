@@ -134,6 +134,10 @@ app.controller('mainCtrl', function($scope, $http) {
 		 if (this.x - this.maxScrollX == 0) {
 			 $scope.dailyForecast = pullRightAction($scope.dailyForecast);
 			 console.log($scope.dailyForecast);
+			 $("#scroller").css("width", function () {
+					var bar_width = 72;
+					return bar_width * $scope.dailyForecast.length;
+				});
 			 myScroll.refresh();
          }
 	});

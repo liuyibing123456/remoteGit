@@ -6,24 +6,17 @@
 <title>Insert title here</title>
 <link rel="stylesheet" href="../css/bootstrap.min.css">
 </head>
-<body onload="init()">
-<div id="wrapper" style="height: 200px; width: 100%; ">
-	<div style="height: 200px; width: 1000px;">
-		<div style="height: 200px; width: 100px; background-color: #000000; margin-left: 2px; float: left;"></div>
-		<div style="height: 200px; width: 100px; background-color: #000000; margin-left: 2px; float: left;"></div>
-		<div style="height: 200px; width: 100px; background-color: #000000; margin-left: 2px; float: left;"></div>
-		<div style="height: 200px; width: 100px; background-color: #000000; margin-left: 2px; float: left;"></div>
-		<div style="height: 200px; width: 100px; background-color: #000000; margin-left: 2px; float: left;"></div>
-	</div>
-</div>
-
+<body ng-app="testApp" ng-controller="testCtrl">
+<div>{{ data }}</div>
+<input type="text" ng-model="data" />
 <script src="../js/jquery/jquery-1.11.1.js"></script>
 <script src="../js/bootstrap/bootstrap.min.js"></script>
-<script src="../js/other/iscroll.js"></script>
+<script src="../js/angular/angular.js"></script>
 <script type="text/javascript">
-function init() {
-var myScroll = new IScroll('#wrapper', { eventPassthrough: true, scrollX: true, scrollY: false, preventDefault: false });
-}
+var app = angular.module('testApp', []);
+app.controller('testCtrl', function($scope) {
+	$scope.data = "fdfd";
+});
 </script>
 </body>
 </html>
