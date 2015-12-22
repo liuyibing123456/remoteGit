@@ -82,6 +82,7 @@
 			<div class="circle">
 				<div class="circle_left"></div>
 				<div class="circle_right"></div>
+    			<button ng-click="$storage.counter = $storage.counter + 1">{{$storage.counter}}</button>
 			</div>
 		</div>
 	</div>
@@ -102,6 +103,7 @@
 <script src="../js/jquery/jquery-1.11.1.js"></script>
 <script src="../js/bootstrap/bootstrap.min.js"></script>
 <script src="../js/angular/angular.js"></script>
+<script src="../js/angular/ngStorage.min.js"></script>
 <script src="../js/other/iscroll-lite.js"></script>
 <script type="text/javascript">
 function pullRightAction(array) {
@@ -110,8 +112,12 @@ function pullRightAction(array) {
 	return array.concat(newArray);
 }
 
-var app = angular.module('mainApp', []);
-app.controller('mainCtrl', function($scope, $http) {
+var app = angular.module('mainApp', ['ngStorage']);
+app.controller('mainCtrl', function($scope, $http, $localStorage) {
+	$scope.$storage = $localStorage.$default({
+	    counter: 42
+	});
+	
 	$scope.dailyForecast = [{date:'周一', cond:{code_d:'100', code_n:'101', txt_d:'晴', txt_n:'阴'}, tmp:{max:'11', min:'16'}},
 	                {date:'周二', cond:{code_d:'101', code_n:'101', txt_d:'晴', txt_n:'阴'}, tmp:{max:'-3', min:'16'}},
 					{date:'周三', cond:{code_d:'102', code_n:'102', txt_d:'晴', txt_n:'阴'}, tmp:{max:'3', min:'33'}},
