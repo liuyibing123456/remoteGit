@@ -15,9 +15,13 @@
 	border-right-width: 1px;
 }
 
+#weather_info_bar {
+	width: 72px;
+}
+
 .weather_info_bar {
 	height: 150px;
-	width: 20%;
+	width: 72px; /*20%;*/
 	background-color : rgba(100,100,102,0.4);
 	border-left: 1px solid #4A4A4A;
 	text-align: center;
@@ -60,10 +64,14 @@
 	height: 100%;
 	float: left;
 }
+
+#wrapper {
+	height: 150px;
+}
 </style>
 </head>
 <body>
-<div class="container">
+<div class="container" ng-app="mainApp" ng-controller="mainCtrl">
 	<div class="row">
 		<div class="col-xs-12">
 			<div class="global_title">丰台</div>
@@ -74,35 +82,21 @@
 			<div class="circle">
 				<div class="circle_left"></div>
 				<div class="circle_right"></div>
+    			<button ng-click="$storage.counter = $storage.counter + 1">{{$storage.counter}}</button>
+    			<button ng-click="testFunc()"></button>
 			</div>
 		</div>
 	</div>
 	<div class="row navbar-fixed-bottom">
 		<div class="col-xs-12">
-			<div class="weather_info_bar">
-				<div class="week">周一</div>
-				<img alt="" src="../image/code/100.png" class="img-responsive center-block">
-				<div class="temper">11~16°</div>
-			</div>
-			<div class="weather_info_bar">
-				<div class="week">周二</div>
-				<img alt="" src="../image/code/101.png" class="img-responsive center-block">
-				<div class="temper">4~12°</div>
-			</div>
-			<div class="weather_info_bar">
-				<div class="week">周三</div>
-				<img alt="" src="../image/code/102.png" class="img-responsive center-block">
-				<div class="temper">-9~11°</div>
-			</div>
-			<div class="weather_info_bar">
-				<div class="week">周四</div>
-				<img alt="" src="../image/code/103.png" class="img-responsive center-block">
-				<div class="temper">-10~-21°</div>
-			</div>
-			<div class="weather_info_bar">
-				<div class="week">周五</div>
-				<img alt="" src="../image/code/104.png" class="img-responsive center-block">
-				<div class="temper">0~9°</div>
+			<div  id="wrapper">
+				<div id="scroller">
+					<div class="weather_info_bar" ng-repeat="data in dailyForecast">
+						<div class="week">{{ data.date }}</div>
+						<img alt="" ng-src="../image/code/{{ data.cond.code_d }}.png" class="img-responsive center-block">
+						<div class="temper">{{ data.tmp.max }}~{{ data.tmp.min }}°</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -110,7 +104,91 @@
 <script src="../js/jquery/jquery-1.11.1.js"></script>
 <script src="../js/bootstrap/bootstrap.min.js"></script>
 <script src="../js/angular/angular.js"></script>
+<script src="../js/angular/ngStorage.min.js"></script>
+<script src="../js/other/iscroll-lite.js"></script>
 <script type="text/javascript">
+function pullRightAction(array) {
+	newArray = [{date:'周一', cond:{code_d:'100', code_n:'101', txt_d:'晴', txt_n:'阴'}, tmp:{max:'11', min:'16'}},
+				{date:'周五', cond:{code_d:'104', code_n:'104', txt_d:'晴', txt_n:'阴'}, tmp:{max:'-9', min:'-1'}}];
+	return array.concat(newArray);
+}
+
+var app = angular.module('mainApp', ['ngStorage']);
+app.controller('mainCtrl', function($scope, $http, $localStorage) {
+	
+	$scope.testFunc = function() {
+		$scope.dailyForecast = [{date:'周一', cond:{code_d:'100', code_n:'101', txt_d:'晴', txt_n:'阴'}, tmp:{max:'11', min:'16'}},
+		    	                {date:'周二', cond:{code_d:'101', code_n:'101', txt_d:'晴', txt_n:'阴'}, tmp:{max:'-3', min:'16'}},
+		    					{date:'周三', cond:{code_d:'102', code_n:'102', txt_d:'晴', txt_n:'阴'}, tmp:{max:'3', min:'33'}},
+		    	            	{date:'周四', cond:{code_d:'103', code_n:'103', txt_d:'晴', txt_n:'阴'}, tmp:{max:'4', min:'11'}},
+		    	            	{date:'周四', cond:{code_d:'103', code_n:'103', txt_d:'晴', txt_n:'阴'}, tmp:{max:'4', min:'11'}},
+		    					{date:'周五', cond:{code_d:'104', code_n:'104', txt_d:'晴', txt_n:'阴'}, tmp:{max:'-9', min:'-1'}},
+		    					{date:'周一', cond:{code_d:'100', code_n:'101', txt_d:'晴', txt_n:'阴'}, tmp:{max:'11', min:'16'}},
+		    	                {date:'周二', cond:{code_d:'101', code_n:'101', txt_d:'晴', txt_n:'阴'}, tmp:{max:'-3', min:'16'}},
+		    					{date:'周三', cond:{code_d:'102', code_n:'102', txt_d:'晴', txt_n:'阴'}, tmp:{max:'3', min:'33'}},
+		    	            	{date:'周四', cond:{code_d:'103', code_n:'103', txt_d:'晴', txt_n:'阴'}, tmp:{max:'4', min:'11'}}];
+		
+		$("#scroller").css("width", function () {
+			var bar_width = 72;
+			return bar_width * $scope.dailyForecast.length;
+		});
+	};
+	
+	$scope.$storage = $localStorage.$default({
+	    counter: 42
+	});
+	
+	$scope.dailyForecast = [{date:'周一', cond:{code_d:'100', code_n:'101', txt_d:'晴', txt_n:'阴'}, tmp:{max:'11', min:'16'}},
+	                {date:'周二', cond:{code_d:'101', code_n:'101', txt_d:'晴', txt_n:'阴'}, tmp:{max:'-3', min:'16'}},
+					{date:'周三', cond:{code_d:'102', code_n:'102', txt_d:'晴', txt_n:'阴'}, tmp:{max:'3', min:'33'}},
+	            	{date:'周四', cond:{code_d:'103', code_n:'103', txt_d:'晴', txt_n:'阴'}, tmp:{max:'4', min:'11'}},
+					{date:'周五', cond:{code_d:'104', code_n:'104', txt_d:'晴', txt_n:'阴'}, tmp:{max:'-9', min:'-1'}}];
+	
+	// set element`s width
+	$("#scroller").css("width", function () {
+		var bar_width = 72;
+		return bar_width * $scope.dailyForecast.length;
+	});
+	var myScroll = new IScroll('#wrapper', {
+		eventPassthrough: true,
+		scrollX: true,
+		scrollY: false,
+		preventDefault: true
+	});
+	myScroll.on('scrollEnd', function() {
+		//alert(this.x + " : " + this.maxScrollX);
+		 if (this.x - this.maxScrollX == 0) {
+			 //$scope.dailyForecast = pullRightAction($scope.dailyForecast);
+			 $scope.dailyForecast = [{date:'周一', cond:{code_d:'100', code_n:'101', txt_d:'晴', txt_n:'阴'}, tmp:{max:'11', min:'16'}},
+			     	                {date:'周二', cond:{code_d:'101', code_n:'101', txt_d:'晴', txt_n:'阴'}, tmp:{max:'-3', min:'16'}},
+			    					{date:'周三', cond:{code_d:'102', code_n:'102', txt_d:'晴', txt_n:'阴'}, tmp:{max:'3', min:'33'}},
+			    	            	{date:'周四', cond:{code_d:'103', code_n:'103', txt_d:'晴', txt_n:'阴'}, tmp:{max:'4', min:'11'}},
+			    	            	{date:'周四', cond:{code_d:'103', code_n:'103', txt_d:'晴', txt_n:'阴'}, tmp:{max:'4', min:'11'}},
+			    					{date:'周五', cond:{code_d:'104', code_n:'104', txt_d:'晴', txt_n:'阴'}, tmp:{max:'-9', min:'-1'}}];
+			 console.log(JSON.stringify($scope.dailyForecast));
+			 $("#scroller").css("width", function () {
+					var bar_width = 72;
+					return bar_width * $scope.dailyForecast.length;
+				});
+			 myScroll.refresh();
+         }
+	});
+	
+	/* $http({
+		method : "get",
+		contentType : 'application/json;charset=UTF-8',
+		dataType : 'json',
+		url : "../city/queryProvinces.do",
+		data : ""
+	}).success(function(data, status) {
+        //$scope.status = status;
+        $scope.dailyForecast = data;
+        //alert($scope.provinceList);
+     }).error(function(data, status) {
+       //$scope.data = data || "Request failed";
+       //$scope.status = status;
+   }); */
+});
 </script>
 </body>
 </html>
