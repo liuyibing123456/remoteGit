@@ -158,13 +158,9 @@ app.controller('mainCtrl', function($scope, $http, $localStorage) {
 	myScroll.on('scrollEnd', function() {
 		//alert(this.x + " : " + this.maxScrollX);
 		 if (this.x - this.maxScrollX == 0) {
-			 //$scope.dailyForecast = pullRightAction($scope.dailyForecast);
-			 $scope.dailyForecast = [{date:'周一', cond:{code_d:'100', code_n:'101', txt_d:'晴', txt_n:'阴'}, tmp:{max:'11', min:'16'}},
-			     	                {date:'周二', cond:{code_d:'101', code_n:'101', txt_d:'晴', txt_n:'阴'}, tmp:{max:'-3', min:'16'}},
-			    					{date:'周三', cond:{code_d:'102', code_n:'102', txt_d:'晴', txt_n:'阴'}, tmp:{max:'3', min:'33'}},
-			    	            	{date:'周四', cond:{code_d:'103', code_n:'103', txt_d:'晴', txt_n:'阴'}, tmp:{max:'4', min:'11'}},
-			    	            	{date:'周四', cond:{code_d:'103', code_n:'103', txt_d:'晴', txt_n:'阴'}, tmp:{max:'4', min:'11'}},
-			    					{date:'周五', cond:{code_d:'104', code_n:'104', txt_d:'晴', txt_n:'阴'}, tmp:{max:'-9', min:'-1'}}];
+			 $scope.$apply(function () {
+			 	$scope.dailyForecast = pullRightAction($scope.dailyForecast);
+			 });
 			 console.log(JSON.stringify($scope.dailyForecast));
 			 $("#scroller").css("width", function () {
 					var bar_width = 72;
