@@ -89,7 +89,7 @@
 		<div class="col-xs-12">
 			<div  id="wrapper">
 				<div id="scroller">
-					<div class="weather_info_bar" ng-repeat="data in dailyForecast">
+					<div class="weather_info_bar" data-toggle="popover" ng-repeat="data in dailyForecast">
 						<div class="week">{{ data.date }}</div>
 						<img alt="" ng-src="../image/code/{{ data.cond.code_d }}.png" class="img-responsive center-block">
 						<div class="temper">{{ data.tmp.max }}~{{ data.tmp.min }}°</div>
@@ -105,6 +105,16 @@
 <script src="../js/angular/ngStorage.min.js"></script>
 <script src="../js/other/iscroll-lite.js"></script>
 <script type="text/javascript">
+$(function () {
+	$(".weather_info_bar").popover({
+		trigger : 'click',
+		placement : 'top',
+		html : true,
+		title : 'abc',
+		content : 'what are you d'
+	});
+});
+
 /**
  * refresh dailyForecast array
  */
