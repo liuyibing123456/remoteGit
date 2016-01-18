@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-<pub>
-<channelId>31</channelId>
-<trandate>20160101</trandate>
-<tranid>431254643</tranid>
-<pri>
-<accountno>62109813431243234</accountno>
-<accounttype>3</accounttype>
-<list>
-<rows>
-<fb>1</fb>
-<acc>acbd</acc>
-</rows>
-<rows>
-<fb>2</fb>
-<acc>fefe</acc>
-</rows>
-</list>
-</pri>
-</pub>
+	<pub>
+		<channelId>31</channelId>
+		<trandate>20160101</trandate>
+		<tranid>431254643</tranid>
+	</pub>
+	<pri>
+		<accountno>62109813431243234</accountno>
+		<accounttype>3</accounttype>
+		<list>
+			<rows>
+				<fb>1</fb>
+				<acc>acbd</acc>
+			</rows>
+			<rows>
+				<fb>2</fb>
+				<acc>fefe</acc>
+			</rows>
+		</list>
+	</pri>
 </root>
